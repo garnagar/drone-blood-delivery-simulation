@@ -4,11 +4,12 @@ File: DistribCenter.py
 Author:  Lukas Kyzlik
 """
 import numpy as np
+import googlemaps
 
 class DistrbCenter:
     """ TODO """
 
-    def __init__(self, id, lat, long, hospitalList=[], dronesList=[], ambulancesList=[]):
+    def __init__(self, id, long, lat, hospitalList=[], dronesList=[], ambulancesList=[]):
         """ Constructor """
         self.id = id
         self.location = dict(lat=lat, long=long)
@@ -58,5 +59,16 @@ class DistrbCenter:
     def advanceSim(self):
         for req in self.booldRequests:
             self.sendDrone(req['hospId'], req['amount'])
+    
+    def get_distance_hospital(self, hospital):
+        origin = str(self.location['long'])+','+str(self.location['lat'])
+        destination = str(hospital.longitude)+','+str(hospital.latitude)
 
+        print(origin)
+        print(destination)
 
+        gmaps = googlemaps.Client(key='AIzaSyC02gPus-Wzee0vswTGeuh5drh5VmL3alA')
+
+        directions_result = gmaps.distance_matrix(origins=origin, destinations=destination)
+
+        print(directions_result)

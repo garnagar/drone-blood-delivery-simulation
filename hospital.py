@@ -1,7 +1,6 @@
 class Hospital:
 
-    def __init__(self, hospitalID, current_level_of_blood, max_level_of_blood, min_safe_level_of_blood,
-             longitude, latitude, dc):
+    def __init__(self, hospitalID, longitude, latitude, current_level_of_blood=None, max_level_of_blood=None, min_safe_level_of_blood=None, dc=None):
         self.hospitalID = hospitalID
         self.current_level_of_blood = current_level_of_blood
         self.max_level_of_blood = max_level_of_blood
