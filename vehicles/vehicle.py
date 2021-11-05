@@ -1,12 +1,16 @@
+import googlemaps
+
 class Vehicle:
-    def __init__(self, id, dst_center, km_consumption, km_emissions, current_carrying_capacity, max_speed, current_speed) -> None:
+    gmaps = googlemaps.Client(key='AIzaSyC02gPus-Wzee0vswTGeuh5drh5VmL3alA')
+
+    def __init__(self, id, dst_center, km_consumption=None, km_emissions=None, current_carrying_capacity=None, isAvailable=True) -> None:
         self.id = id
         self.dst_center = dst_center
         self.km_consumption = km_consumption
         self.km_emissions = km_emissions
         self.current_carrying_capacity = current_carrying_capacity
-        self.max_speed = max_speed
-        self.current_speed = current_speed
+        # self.max_speed = max_speed
+        self.isAvailable = isAvailable
 
     def calculate_delivery_time(self, hospital):
         pass
@@ -15,8 +19,7 @@ class Vehicle:
         pass
 
     def calculate_delivery_emissions(self, hospital):
-        pass
+        return self.km_emissions*self.get_distance_hospital(hospital)
 
     def get_distance_hospital(self, hospital):
-        # calculates distance between self.dst_center and hospital
         pass

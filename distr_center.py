@@ -3,10 +3,9 @@ Project: Drone Blood Delivery Simulator
 File: DistribCenter.py
 Author:  Lukas Kyzlik
 """
-import googlemaps
 import numpy as np
 
-class DistrbCenter:
+class DistrCenter:
     """ TODO """
 
     def __init__(self, id, long, lat, hospitalList=[], dronesList=[], ambulancesList=[]):
@@ -23,7 +22,7 @@ class DistrbCenter:
         batteryLevel = -np.Inf
         selectedDrone = None
         for drone in self.drones:
-            if drone.isAvalible:
+            if drone.isAvailable:
                 if drone.currentBattery > batteryLevel:
                     selectedDrone = drone
                     batteryLevel = drone.currentBattery
@@ -31,7 +30,7 @@ class DistrbCenter:
 
     def getAmbulance(self):
         for ambulance in self.ambulances:
-            if ambulance.isAvalible:
+            if ambulance.isAvailable:
                 return ambulance
         return None
 
@@ -40,7 +39,7 @@ class DistrbCenter:
         ambulance = self.getAmbulance()
         if ambulance is None:
             return False
-        ambulance.isAvalible = False
+        ambulance.isAvailable = False
         # TODO: activate return mechanism
         return True
 
@@ -49,7 +48,7 @@ class DistrbCenter:
         drone = self.getDroneHighestBattery()
         if drone is None:
             return False
-        drone.isAvalible = False
+        drone.isAvailable = False
         # TODO: activate return mechanism
         return True
 
@@ -59,16 +58,4 @@ class DistrbCenter:
     def advanceSim(self):
         for req in self.booldRequests:
             self.sendDrone(req['hospId'], req['amount'])
-    
-    
-    def get_distance_hospital(self, hospital):
-        origin = str(self.location['long'])+','+str(self.location['lat'])
-        destination = str(hospital.longitude)+','+str(hospital.latitude)
-
-        gmaps = googlemaps.Client(key='AIzaSyC02gPus-Wzee0vswTGeuh5drh5VmL3alA')
-
-        directions_result = gmaps.distance_matrix(origins=origin, destinations=destination)
-
-        print(directions_result)
-    
-    
+            
