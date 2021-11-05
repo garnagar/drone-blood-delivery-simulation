@@ -3,8 +3,8 @@ Project: Drone Blood Delivery Simulator
 File: DistribCenter.py
 Author:  Lukas Kyzlik
 """
-import numpy as np
 import googlemaps
+import numpy as np
 
 class DistrbCenter:
     """ TODO """
@@ -60,15 +60,15 @@ class DistrbCenter:
         for req in self.booldRequests:
             self.sendDrone(req['hospId'], req['amount'])
     
+    
     def get_distance_hospital(self, hospital):
         origin = str(self.location['long'])+','+str(self.location['lat'])
         destination = str(hospital.longitude)+','+str(hospital.latitude)
-
-        print(origin)
-        print(destination)
 
         gmaps = googlemaps.Client(key='AIzaSyC02gPus-Wzee0vswTGeuh5drh5VmL3alA')
 
         directions_result = gmaps.distance_matrix(origins=origin, destinations=destination)
 
         print(directions_result)
+    
+    
