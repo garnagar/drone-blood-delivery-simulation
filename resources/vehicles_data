@@ -1,12 +1,16 @@
 ### drone ###
-speed=100
-km_emissions=2.51
-battery_capacity
-total_carrying_capacity
-charging_speed
-km_consumption = km_consumption
-current_carrying_capacity
-        
+speed=101                               # kmh
+km_emissions=2.51                       # g CO_2 / km
+battery_capacity=1.25                   #kWh
+total_carrying_capacity=1.75            #kg
+charging_speed                          # 0-100 30min
+km_consumption = 0.0083                 # 1.25 kWh / 150 km
 
 ### ambulance ###
-km_emissions=21.60
+km_emissions=322                        # g CO_2 / km
+km_consumption=0.122                    # l/km
+fuel_capacity=90                       # l
+
+
+# https://www.ultimatespecs.com/car-specs/Toyota/5341/Toyota-Land-Cruiser-V-24-HardTop.html
+# https://www.globalpetrolprices.com/Kenya/electricity_prices/

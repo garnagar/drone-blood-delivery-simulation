@@ -1,13 +1,16 @@
+from hospital import Hospital
 from vehicles.vehicle import Vehicle
 from geopy import distance
 
 class Drone(Vehicle):
-    def __init__(self, id, dst_center, km_consumption, km_emissions, current_carrying_capacity, current_battery, battery_capacity, total_carrying_capacity, charging_speed) -> None:
+    elec_cost = 0.146
+    def __init__(self, id, dst_center, km_consumption, km_emissions, current_carrying_capacity, battery_capacity, total_carrying_capacity, charging_speed, speed) -> None:
         super().__init__(id, dst_center, km_consumption, km_emissions, current_carrying_capacity)
         self.current_battery = battery_capacity
         self.battery_capacity = battery_capacity
         self.total_carrying_capacity = total_carrying_capacity
         self.charging_speed = charging_speed
+        self.speed = speed
 
     def calculate_delivery_power_consumption(self, hospital):
         return self.get_distance_hospital(hospital) * self.km_consumption
@@ -24,4 +27,7 @@ class Drone(Vehicle):
         return round(dist, 2)
     
     def calculate_delivery_time(self, hospital):
-        pass
+        return round(self.get_distance_hospital(hospital)/self.speed, 2)
+
+    def calculate_delivery_cost(self, hospital):
+        return self.elec_cost * self.get_distance_hospital(hospital) * self.calculate_delivery_power_consumption(Hospital)
