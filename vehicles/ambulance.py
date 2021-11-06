@@ -1,15 +1,15 @@
 from vehicles.vehicle import Vehicle
 
 class Ambulance(Vehicle):
-    def __init__(self, id, dst_center, fuel_consumption=None, fuel_capacity=None, current_fuel_capacity=None) -> None:
-        super().__init__(id, dst_center, km_emissions=21.60)
+
+    def __init__(self, id, dst_center, km_consumption, km_emissions, current_carrying_capacity, fuel_consumption, fuel_capacity, current_fuel_capacity) -> None:
+        super().__init__(id, dst_center, km_consumption, km_emissions, current_carrying_capacity)
         self.fuel_consumption = fuel_consumption
         self.fuel_capacity = fuel_capacity
         self.current_fuel_capacity = current_fuel_capacity
-        # self.avg_speed = avg_speed
 
     def calculate_delivery_fuel_consumption(self, hospital):
-        pass
+        return self.get_distance_hospital(hospital) * self.km_consumption
 
     def get_distance_hospital(self, hospital):
         origin = str(self.dst_center.location['long'])+','+str(self.dst_center.location['lat'])
@@ -19,8 +19,7 @@ class Ambulance(Vehicle):
 
         return round(dist['rows'][0]['elements'][0]['distance']['value']/1000, 2)
 
-
-    def get_eta(self, hospital):
+    def calculate_delivery_time(self, hospital):
         origin = str(self.dst_center.location['long'])+','+str(self.dst_center.location['lat'])
         destination = str(hospital.location['long'])+','+str(hospital.location['lat'])
 

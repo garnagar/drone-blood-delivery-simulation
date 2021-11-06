@@ -2,9 +2,9 @@ from vehicles.vehicle import Vehicle
 from geopy import distance
 
 class Drone(Vehicle):
-    def __init__(self, id, dst_center, current_battery, battery_capacity, total_carrying_capacity, charging_speed) -> None:
-        super().__init__(id, dst_center, km_emissions=2.51)             #2.5056 grams of CO2/KWh
-        self.current_battery = current_battery
+    def __init__(self, id, dst_center, km_consumption, km_emissions, current_carrying_capacity, current_battery, battery_capacity, total_carrying_capacity, charging_speed) -> None:
+        super().__init__(id, dst_center, km_consumption, km_emissions, current_carrying_capacity)
+        self.current_battery = battery_capacity
         self.battery_capacity = battery_capacity
         self.total_carrying_capacity = total_carrying_capacity
         self.charging_speed = charging_speed
@@ -23,5 +23,5 @@ class Drone(Vehicle):
 
         return round(dist, 2)
     
-    def get_eta(self, hospital):
+    def calculate_delivery_time(self, hospital):
         pass
