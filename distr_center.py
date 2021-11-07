@@ -4,6 +4,8 @@ File: DistribCenter.py
 Author:  Lukas Kyzlik
 """
 import numpy as np
+from vehicles import drone
+from vehicles import ambulance
 
 class DistrCenter:
     """ TODO """
@@ -15,7 +17,7 @@ class DistrCenter:
         self.hospitals = hospitalList
         self.drones = dronesList
         self.ambulances = ambulancesList
-        self.booldRequests = []
+        self.bloodRequests = []
 
     def getDroneHighestBattery(self):
         """ TODO """
@@ -53,9 +55,9 @@ class DistrCenter:
         return True
 
     def acceptBloodRequest(self, hospitalId, bloodAmount):
-        self.booldRequests.append(dict(hospId=hospitalId, amount=bloodAmount))
+        self.bloodRequests.append(dict(hospId=hospitalId, amount=bloodAmount))
 
     def advanceSim(self):
-        for req in self.booldRequests:
+        for req in self.bloodRequests:
             self.sendDrone(req['hospId'], req['amount'])
             

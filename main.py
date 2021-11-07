@@ -12,9 +12,9 @@ def main():
     hospital_2 = Hospital(1, -1.3042120313089076, 36.806186441462806)
     
     amb_1 = Ambulance(0, dst_test_1)
-    drone_1 = Drone(0, dst_test_1)
+    drone_1 = Drone(1, dst_test_2)
 
-    print(drone_1.isAvailable)
+    print("Hello")
     
 
 if __name__ == '__main__':
