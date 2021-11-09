@@ -4,60 +4,54 @@ File: DistribCenter.py
 Author:  Lukas Kyzlik
 """
 import numpy as np
+import simpy
+
 from vehicles import drone
 from vehicles import ambulance
 
 class DistrCenter:
-    """ TODO """
 
-    def __init__(self, id, long, lat, hospitalList=[], dronesList=[], ambulancesList=[]):
+    def __init__(self, env, id, long, lat, dronesList=[], ambulancesList=[]):
         """ Constructor """
         self.id = id
         self.location = dict(lat=lat, long=long)
-        self.hospitals = hospitalList
         self.drones = dronesList
         self.ambulances = ambulancesList
-        self.bloodRequests = []
+        self.drones_resource = simpy.Resource(env, capacity=len(dronesList))
+        self.ambulances_resource = simpy.Resource(env, capacity=len(ambulancesList))
 
-    def getDroneHighestBattery(self):
-        """ TODO """
+    def get_drone_highest_battery(self):
         batteryLevel = -np.Inf
         selectedDrone = None
         for drone in self.drones:
-            if drone.isAvailable:
-                if drone.currentBattery > batteryLevel:
+            if drone.is_available:
+                if drone.current_battery > batteryLevel:
                     selectedDrone = drone
-                    batteryLevel = drone.currentBattery
+                    batteryLevel = drone.current_battery
         return selectedDrone
 
-    def getAmbulance(self):
+    def get_ambulance(self):
         for ambulance in self.ambulances:
-            if ambulance.isAvailable:
+            if ambulance.is_available:
                 return ambulance
         return None
 
-    def sendAmbulance(self, hosptalId, bloodAmount):
-        """ TODO """
-        ambulance = self.getAmbulance()
-        if ambulance is None:
-            return False
-        ambulance.isAvailable = False
-        # TODO: activate return mechanism
-        return True
+    def process_boold_request(self, env, hospital, amount):
+        with self.drones_resource.request() as req:
+            t0 = env.now
+            yield req
+            drone = self.get_drone_highest_battery()
+            drone.is_available = False
+            print("t={}\tDrone leaving base -- drone ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
+                str(env.now).zfill(3), drone.id, hospital.hospitalID, amount, env.now - t0))
+            yield env.timeout(round(drone.calculate_delivery_time(hospital, self)))
+            print("t={}\tBlood delivered -- drone ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
+                str(env.now).zfill(3), drone.id, hospital.hospitalID, amount, env.now-t0))
+            yield env.timeout(round(drone.calculate_delivery_time(hospital, self)))
+            print("t={}\tDrone back at base -- drone ID: {}, time from request: {}".format(
+                str(env.now).zfill(3), drone.id, env.now - t0))
+            drone.is_available = True
 
-    def sendDrone(self, hosptalId, bloodAmount):
-        """ TODO """
-        drone = self.getDroneHighestBattery()
-        if drone is None:
-            return False
-        drone.isAvailable = False
-        # TODO: activate return mechanism
-        return True
 
-    def acceptBloodRequest(self, hospitalId, bloodAmount):
-        self.bloodRequests.append(dict(hospId=hospitalId, amount=bloodAmount))
 
-    def advanceSim(self):
-        for req in self.bloodRequests:
-            self.sendDrone(req['hospId'], req['amount'])
             
