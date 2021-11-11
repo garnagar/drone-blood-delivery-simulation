@@ -14,11 +14,11 @@ class Vehicle:
     def calculate_delivery_time(self, hospital, dst_center):
         pass
 
-    def calculate_delivery_cost(self, hospital):
+    def calculate_delivery_cost(self, hospital, dst_center):
         pass
 
-    def calculate_delivery_emissions(self, hospital):
-        return self.km_emissions*self.get_distance_hospital(hospital)
+    def calculate_delivery_emissions(self, hospital, dst_center):
+        return self.km_emissions*self.get_distance_hospital(hospital, dst_center)
 
     def get_distance_hospital(self, hospital, dst_center):
         pass

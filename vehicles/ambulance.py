@@ -9,8 +9,8 @@ class Ambulance(Vehicle):
         self.fuel_capacity = AMBULANCE_FUEL_CAPACITY
         self.current_fuel_capacity = AMBULANCE_FUEL_CAPACITY
 
-    def calculate_delivery_fuel_consumption(self, hospital):
-        return self.get_distance_hospital(hospital)*self.km_consumption
+    def calculate_delivery_fuel_consumption(self, hospital, dst_center):
+        return self.get_distance_hospital(hospital, dst_center)*self.km_consumption
 
     def get_distance_hospital(self, hospital, dst_center):
         origin = str(dst_center.location['long'])+','+str(dst_center.location['lat'])

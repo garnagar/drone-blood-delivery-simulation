@@ -1,0 +1,64 @@
+@startuml
+abstract class "Vehicle" {
+id: int
+km_consumption: float
+km_emissions: float
+total_carrying_capacity: int
+current_carrying_capacity: int
+is_available: bool
+
+{abstract} calculate_delivery_time(hospital, dst_center)
+{abstract} calculate_delivery_cost(hospital, dst_center)
+{abstract} calculate_delivery_emissions(hospital, dst_center)
+{abstract} get_distance_hospital(hospital, dst_center)
+}
+
+class "Hospital" {
+hospitalID: int
+location: Dict<lat, long>
+distr_center: DistributionCenter
+
+blood_request_generator(min_period, max_period, min_amount, max_amount)
+}
+
+class "DistributionCenter" {
+id: int
+location: Dict<lat, long>
+drones: Drone[]
+ambulances: Ambulance[]
+drones_resource: simpy.Resource
+ambulances_resource: simpy.Resource
+
+get_drone_highest_battery()
+get_ambulance()
+process_blood_request(hospital, amount)
+}
+
+class "Ambulance" extends Vehicle {
+fuel_capacity: float
+current_fuel_capacity: float
+
+calculate_delivery_fuel_consumption(hospital)
+get_distance_hospital(hospital, dst_center)
+calculate_delivery_time(hospital, dst_center)
+calculate_delivery_cost(hospital, dst_center)
+
+}
+
+class "Drone" extends Vehicle {
+current_battery: float
+battery_capacity: float
+total_carrying_capacity: float
+charging_speed: float
+speed: int
+
+calculate_delivery_power_consumption(hospital, dst_center)
+charging_time()
+get_distance_hospital(hospital, dst_center)
+calculate_delivery_time(hospital, dst_center)
+calculate_delivery_cost(hospital, dst_center)
+}
+
+DistributionCenter "1" --> "1..*   " Hospital
+DistributionCenter "1   " *-- "1..*" Vehicle
+@enduml

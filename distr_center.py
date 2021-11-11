@@ -36,7 +36,7 @@ class DistrCenter:
                 return ambulance
         return None
 
-    def process_boold_request(self, env, hospital, amount):
+    def process_blood_request(self, env, hospital, amount):
         with self.drones_resource.request() as req:
             t0 = env.now
             yield req
