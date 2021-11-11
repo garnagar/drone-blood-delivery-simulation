@@ -18,6 +18,6 @@ class Hospital:
     def blood_request_generator(self, env, min_period, max_period, min_amount, max_amount):
         while True:
             amount = random.randint(min_amount, max_amount)
-            env.process(self.distr_center.process_boold_request(env, self, amount))
+            env.process(self.distr_center.process_blood_request(env, self, amount))
             print("t={}\tBlood requested -- hospital ID: {}, amount: {}".format(str(env.now).zfill(3), self.hospitalID, amount))
             yield env.timeout(random.randint(min_period, max_period))  # Wait random period
