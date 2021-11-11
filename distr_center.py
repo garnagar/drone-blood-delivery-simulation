@@ -52,6 +52,21 @@ class DistrCenter:
                 str(env.now).zfill(3), drone.id, env.now - t0))
             drone.is_available = True
 
+        # with self.ambulances_resource.request() as req:
+        #     t0 = env.now
+        #     yield req
+        #     ambulance = self.get_ambulance()
+        #     ambulance.is_available = False
+        #     print("t={}\tAmbulance leaving base -- ambulance ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
+        #         str(env.now).zfill(3), ambulance.id, hospital.hospitalID, amount, env.now - t0))
+        #     yield env.timeout(round(ambulance.calculate_delivery_time(hospital, self)))
+        #     print("t={}\tBlood delivered -- ambulance ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
+        #         str(env.now).zfill(3), ambulance.id, hospital.hospitalID, amount, env.now-t0))
+        #     yield env.timeout(round(ambulance.calculate_delivery_time(hospital, self)))
+        #     print("t={}\tAmbulance back at base -- ambulance ID: {}, time from request: {}".format(
+        #         str(env.now).zfill(3), ambulance.id, env.now - t0))
+        #     ambulance.is_available = True
+
 
 
             

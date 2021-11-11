@@ -26,7 +26,6 @@ class Ambulance(Vehicle):
         destination = str(hospital.location['long'])+','+str(hospital.location['lat'])
 
         eta = Vehicle.gmaps.distance_matrix(origins=origin, destinations=destination)
-
         return round(eta['rows'][0]['elements'][0]['duration']['value']/3600, 4)
     
     def calculate_delivery_cost(self, hospital, dst_center):
