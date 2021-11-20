@@ -2,3 +2,4 @@ googlemaps
 numpy
 simpy
 geopy
+matplotlib
