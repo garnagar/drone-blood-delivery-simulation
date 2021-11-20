@@ -11,9 +11,10 @@ from vehicles import ambulance
 
 class DistrCenter:
 
-    def __init__(self, env, id, long, lat, dronesList=[], ambulancesList=[]):
+    def __init__(self, env, plot, id, long, lat, dronesList=[], ambulancesList=[]):
         """ Constructor """
         self.id = id
+        self.plot = plot
         self.location = dict(lat=lat, long=long)
         self.drones = dronesList
         self.ambulances = ambulancesList
@@ -47,25 +48,27 @@ class DistrCenter:
             yield env.timeout(round(drone.calculate_delivery_time(hospital, self)))
             print("t={}\tBlood delivered -- drone ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
                 str(env.now).zfill(3), drone.id, hospital.hospitalID, amount, env.now-t0))
+            self.plot.add_deliver(env.now, amount, hospital.hospitalID, len(self.drones))
             yield env.timeout(round(drone.calculate_delivery_time(hospital, self)))
             print("t={}\tDrone back at base -- drone ID: {}, time from request: {}".format(
                 str(env.now).zfill(3), drone.id, env.now - t0))
             drone.is_available = True
 
-        # with self.ambulances_resource.request() as req:
-        #     t0 = env.now
-        #     yield req
-        #     ambulance = self.get_ambulance()
-        #     ambulance.is_available = False
-        #     print("t={}\tAmbulance leaving base -- ambulance ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
-        #         str(env.now).zfill(3), ambulance.id, hospital.hospitalID, amount, env.now - t0))
-        #     yield env.timeout(round(ambulance.calculate_delivery_time(hospital, self)))
-        #     print("t={}\tBlood delivered -- ambulance ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
-        #         str(env.now).zfill(3), ambulance.id, hospital.hospitalID, amount, env.now-t0))
-        #     yield env.timeout(round(ambulance.calculate_delivery_time(hospital, self)))
-        #     print("t={}\tAmbulance back at base -- ambulance ID: {}, time from request: {}".format(
-        #         str(env.now).zfill(3), ambulance.id, env.now - t0))
-        #     ambulance.is_available = True
+        #with self.ambulances_resource.request() as req:
+        #    t0 = env.now
+        #    yield req
+        #    ambulance = self.get_ambulance()
+        #    ambulance.is_available = False
+        #    print("t={}\tAmbulance leaving base -- ambulance ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
+        #        str(env.now).zfill(3), ambulance.id, hospital.hospitalID, amount, env.now - t0))
+        #    yield env.timeout(round(ambulance.calculate_delivery_time(hospital, self)))
+        #    print("t={}\tBlood delivered -- ambulance ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
+        #        str(env.now).zfill(3), ambulance.id, hospital.hospitalID, amount, env.now-t0))
+        #    self.plot.add_deliver(env.now, amount, hospital.hospitalID, len(self.ambulances))
+        #    yield env.timeout(round(ambulance.calculate_delivery_time(hospital, self)))
+        #    print("t={}\tAmbulance back at base -- ambulance ID: {}, time from request: {}".format(
+        #        str(env.now).zfill(3), ambulance.id, env.now - t0))
+        #    ambulance.is_available = True
 
 
 
