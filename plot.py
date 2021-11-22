@@ -8,7 +8,10 @@ class Plot:
         self.emissions = {}
         self.costs = {}
 
-    def add_request(self, step, amount, hospital, resource_amount):
+    def add_request(self, step, amount, flag):
+        if (flag is False):
+            return
+
         l = list(self.requests)
 
         if not self.requests:
@@ -16,7 +19,7 @@ class Plot:
         else:
             self.requests[step] = l[-1] + amount
 
-    def add_deliver(self, step, amount, hospital, resource_amount):
+    def add_deliver(self, step, amount, resource_amount):
 
         if resource_amount not in self.deliveries.keys():
             self.deliveries[resource_amount] = {}

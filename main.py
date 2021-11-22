@@ -30,6 +30,10 @@ def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_ti
 
     # Run simulations for amounts of resources within range
     for r in range(min_resources, max_resources + 1):
+        firstIter = True
+
+        if r > min_resources:
+            firstIter = False
 
         print("Starting simulation with {} resource(s) in mode '{}'".format(r, mode))
         env = simpy.Environment()
@@ -45,7 +49,7 @@ def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_ti
 
         hospitals = []
         for i, row in hosp_data.iterrows():
-            hospitals.append(Hospital(env, plot, row['id'], row['long'], row['lat'], dc, blood_req[i], mode, r))
+            hospitals.append(Hospital(env, plot, row['id'], row['long'], row['lat'], dc, blood_req[i], mode, r, firstIter))
 
         env.run(until=sim_time)
 

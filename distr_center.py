@@ -53,7 +53,7 @@ class DistrCenter:
                 print(
                     "t={}\tBlood delivered -- drone ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
                         str(env.now).zfill(3), drone.id, hospital.hospitalID, amount, env.now - t0))
-                self.plot.add_deliver(env.now, amount, hospital.hospitalID, len(self.drones))  # Add point to plot
+                self.plot.add_deliver(env.now, amount, len(self.drones))  # Add point to plot
                 yield env.timeout(round(drone.calculate_delivery_time(hospital, self)))
 
                 # Return to base
@@ -88,7 +88,7 @@ class DistrCenter:
                # Deliver blood
                print("t={}\tBlood delivered -- ambulance ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
                    str(env.now).zfill(3), ambulance.id, hospital.hospitalID, amount, env.now-t0))
-               self.plot.add_deliver(env.now, amount, hospital.hospitalID, len(self.ambulances)) # Add point to plot
+               self.plot.add_deliver(env.now, amount, len(self.ambulances)) # Add point to plot
                yield env.timeout(round(ambulance.calculate_delivery_time(hospital, self)))
 
                # Return to base
