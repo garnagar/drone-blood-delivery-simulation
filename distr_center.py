@@ -3,7 +3,7 @@ import simpy
 
 from vehicles import drone
 from vehicles import ambulance
-from vehicles.config import DRONE_TOTAL_CARRYING_CAPACITY
+from vehicles.config import DRONE_TOTAL_CARRYING_CAPACITY, DRONE_BATTERY_CAPACITY
 
 class DistrCenter:
 
@@ -71,11 +71,24 @@ class DistrCenter:
             
             print("t={}\tDrone back at base -- drone ID: {}, time from request: {}".format(
                 str(env.now).zfill(3), drone.id, env.now - t0))
-            
+
+            trip_consumption= drone.calculate_delivery_power_consumption(hospital, self)
+            drone.current_battery= drone.current_battery - trip_consumption
+            print("trip consumption: " + str(trip_consumption))
+            print("final battery: " + str(drone.current_battery))
+
+            if drone.current_battery < DRONE_BATTERY_CAPACITY * 0.5:
+
+                yield env.timeout(round(drone.charging_time()))
+                drone.current_battery= DRONE_BATTERY_CAPACITY
+
+                print("t={}\tDrone charged -- drone ID: {}, time from request: {}".format(
+                    str(env.now).zfill(3), drone.id, env.now - t0))
+
             drone.is_available = True
             ## discharge drone based on the flight time / or kms
             
-            print("final battery: " + str(drone.charging_time()))
+
 
         #with self.ambulances_resource.request() as req:
         #    t0 = env.now

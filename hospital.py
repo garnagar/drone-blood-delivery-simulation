@@ -12,7 +12,7 @@ class Hospital:
         # self.min_safe_level_of_blood = min_safe_level_of_blood
         self.location = dict(lat=lat, long=long)
         self.distr_center = distribution_center
-        env.process(self.blood_request_generator(env, 5, 10, 1, 4))
+        env.process(self.blood_request_generator(env, 2, 10, 1, 4))
 
     # def consume_blood(self, amount):
     #     self.current_level_of_blood = self.current_level_of_blood - amount
