@@ -21,9 +21,7 @@ class Drone(Vehicle):
     def get_distance_hospital(self, hospital, dst_center):
         origin = (dst_center.location['long'], dst_center.location['lat'])
         destination = (hospital.location['long'], hospital.location['lat'])
-
         dist = distance.distance(origin, destination).km
-
         return round(dist, 2)
     
     # this is rtt = 2*one way
