@@ -9,10 +9,16 @@ from hospital import Hospital
 from vehicles.drone import Drone
 from vehicles.ambulance import Ambulance
 from plot import Plot
-from generators import generate_boold_demand_tseries_normal
+from generators import generate_boold_demand_tseries_normal, generate_boold_demand_tseries_catastrophe
 from config import BLOOD_AMOUNT_MEAN_NORMAL, BLOOD_AMOUNT_SIGMA_NORMAL, BLOOD_AMOUNT_MIN_NORMAL, \
     BLOOD_AMOUNT_MAX_NORMAL, BLOOD_INTERVAL_MEAN_NORMAL, BLOOD_INTERVAL_SIGMA_NORMAL, BLOOD_INTERVAL_MIN_NORMAL, \
-    BLOOD_INTERVAL_MAX_NORMAL, DIST_CENTER_LONG, DIST_CENTER_LAT
+    BLOOD_INTERVAL_MAX_NORMAL, DIST_CENTER_LONG, DIST_CENTER_LAT, BLOOD_AMOUNT_MEAN_CATASTROPHE, \
+    BLOOD_AMOUNT_MIN_CATASTROPHE, BLOOD_AMOUNT_MAX_CATASTROPHE, BLOOD_AMOUNT_SIGMA_CATASTROPHE
+
+
+def BLOOD_AMOUNT_CATASTROPHE(args):
+    pass
+
 
 def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_time):
 
@@ -22,9 +28,13 @@ def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_ti
     # Generate time series for all hospitals in advance
     blood_req = []
     for i in range(hosp_data.shape[0]):
-        blood_req.append(generate_boold_demand_tseries_normal(
-            BLOOD_AMOUNT_MEAN_NORMAL, BLOOD_AMOUNT_SIGMA_NORMAL, BLOOD_AMOUNT_MIN_NORMAL, BLOOD_AMOUNT_MAX_NORMAL,
-            BLOOD_INTERVAL_MEAN_NORMAL, BLOOD_INTERVAL_SIGMA_NORMAL, BLOOD_INTERVAL_MIN_NORMAL, BLOOD_INTERVAL_MAX_NORMAL,
+        # blood_req.append(generate_boold_demand_tseries_catastrophe(
+        #     BLOOD_AMOUNT_MEAN_NORMAL, BLOOD_AMOUNT_SIGMA_NORMAL, BLOOD_AMOUNT_MIN_NORMAL, BLOOD_AMOUNT_MAX_NORMAL,
+        #     BLOOD_INTERVAL_MEAN_NORMAL, BLOOD_INTERVAL_SIGMA_NORMAL, BLOOD_INTERVAL_MIN_NORMAL, BLOOD_INTERVAL_MAX_NORMAL,
+        #     sim_time
+        # ))
+        blood_req.append(generate_boold_demand_tseries_catastrophe(
+            BLOOD_AMOUNT_MEAN_CATASTROPHE, BLOOD_AMOUNT_SIGMA_CATASTROPHE, BLOOD_AMOUNT_MIN_CATASTROPHE, BLOOD_AMOUNT_MAX_CATASTROPHE,
             sim_time
         ))
 
