@@ -57,8 +57,10 @@ class DistrCenter:
                 yield env.timeout(round(drone.calculate_delivery_time(hospital, self)))
 
                 # Return to base
-                trip_consumption = drone.calculate_delivery_power_consumption(hospital, self)
-                drone.current_battery = drone.current_battery - trip_consumption  # Update battery status
+                trip_consumption = drone.calculate_delivery_power_consumption(hospital, self)     
+                self.plot.add_consumptions(env.now, trip_consumption, len(self.drones))
+
+                drone.current_battery = round(drone.current_battery - trip_consumption, 5)  # Update battery status
                 print("t={}\tDrone back at base -- drone ID: {}, battery left: {} kWh, time from request: {},".format(
                     str(env.now).zfill(3), drone.id, drone.current_battery, env.now - t0))
 
