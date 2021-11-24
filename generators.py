@@ -2,7 +2,7 @@ import numpy as np
 import scipy.stats as stats
 import random
 
-def generate_boold_demand_tseries_normal(amount_mean, amount_sigma, amount_min, amount_max,
+def generate_blood_demand_tseries_normal(amount_mean, amount_sigma, amount_min, amount_max,
                                          t_mean, t_sigma, t_min, t_max, length):
     ts = np.zeros(length)
 
@@ -29,7 +29,7 @@ def generate_boold_demand_tseries_normal(amount_mean, amount_sigma, amount_min, 
     print(ts)
     return ts
 
-def generate_boold_demand_tseries_catastrophe(amount_mean, amount_sigma, amount_min, amount_max, length):
+def generate_blood_demand_tseries_catastrophe(amount_mean, amount_sigma, amount_min, amount_max, length):
     ts = np.zeros(length)
 
     # Create random distribution for blood amounts per surgery
