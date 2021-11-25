@@ -13,7 +13,7 @@ from generators import generate_blood_demand_tseries_normal, generate_blood_dema
 from config import BLOOD_AMOUNT_MEAN_NORMAL, BLOOD_AMOUNT_SIGMA_NORMAL, BLOOD_AMOUNT_MIN_NORMAL, \
     BLOOD_AMOUNT_MAX_NORMAL, BLOOD_INTERVAL_MEAN_NORMAL, BLOOD_INTERVAL_SIGMA_NORMAL, BLOOD_INTERVAL_MIN_NORMAL, \
     BLOOD_INTERVAL_MAX_NORMAL, DIST_CENTER_LONG, DIST_CENTER_LAT, BLOOD_AMOUNT_MEAN_CATASTROPHE, \
-    BLOOD_AMOUNT_MIN_CATASTROPHE, BLOOD_AMOUNT_MAX_CATASTROPHE, BLOOD_AMOUNT_SIGMA_CATASTROPHE
+    BLOOD_AMOUNT_MIN_CATASTROPHE, BLOOD_AMOUNT_MAX_CATASTROPHE, BLOOD_AMOUNT_SIGMA_CATASTROPHE, MAX_RESOURCE_AMOUNT, MIN_RESOURCE_AMOUNT, TIMESTEPS
 
 
 def BLOOD_AMOUNT_CATASTROPHE(args):
@@ -33,7 +33,8 @@ def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_ti
             BLOOD_INTERVAL_MEAN_NORMAL, BLOOD_INTERVAL_SIGMA_NORMAL, BLOOD_INTERVAL_MIN_NORMAL, BLOOD_INTERVAL_MAX_NORMAL,
             sim_time
         ))
-        # blood_req.append(generate_blood_demand_tseries_catastrophe(
+         
+        #blood_req.append(generate_blood_demand_tseries_catastrophe(
         #     BLOOD_AMOUNT_MEAN_CATASTROPHE, BLOOD_AMOUNT_SIGMA_CATASTROPHE, BLOOD_AMOUNT_MIN_CATASTROPHE, BLOOD_AMOUNT_MAX_CATASTROPHE,
         #     sim_time
         # ))
@@ -67,7 +68,7 @@ def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_ti
 
 def main():
 
-    run_testcase('resources/tc1_hospitals.csv', 3, 3, 'drones', 500)
+    run_testcase('resources/tc1_hospitals.csv', MIN_RESOURCE_AMOUNT, MAX_RESOURCE_AMOUNT, 'drones', TIMESTEPS)
 
     
 if __name__ == '__main__':
