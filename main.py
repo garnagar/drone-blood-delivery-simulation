@@ -9,6 +9,7 @@ from hospital import Hospital
 from vehicles.drone import Drone
 from vehicles.ambulance import Ambulance
 from plot import Plot
+from plot2 import Plot2
 from generators import generate_blood_demand_tseries_normal, generate_blood_demand_tseries_catastrophe
 from config import BLOOD_AMOUNT_MEAN_NORMAL, BLOOD_AMOUNT_SIGMA_NORMAL, BLOOD_AMOUNT_MIN_NORMAL, \
     BLOOD_AMOUNT_MAX_NORMAL, BLOOD_INTERVAL_MEAN_NORMAL, BLOOD_INTERVAL_SIGMA_NORMAL, BLOOD_INTERVAL_MIN_NORMAL, \
@@ -22,7 +23,7 @@ def BLOOD_AMOUNT_CATASTROPHE(args):
 
 def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_time):
 
-    plot = Plot()
+    plot = Plot2()
     hosp_data = pd.read_csv(hospitals_data_file)
 
     # Generate time series for all hospitals in advance
@@ -60,7 +61,7 @@ def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_ti
 
         hospitals = []
         for i, row in hosp_data.iterrows():
-            hospitals.append(Hospital(env, plot, row['id'], row['long'], row['lat'], dc, blood_req[i], mode, r, firstIter))
+            hospitals.append(Hospital(env, plot, int(row['id']), row['long'], row['lat'], dc, blood_req[i], mode, r, firstIter))
 
         env.run(until=sim_time)
 
@@ -68,7 +69,7 @@ def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_ti
 
 def main():
 
-    run_testcase('resources/tc1_hospitals.csv', MIN_RESOURCE_AMOUNT, MAX_RESOURCE_AMOUNT, 'drones', TIMESTEPS)
+    run_testcase('resources/tc1_hospitals.csv', 1, 2, 'ambulances', TIMESTEPS)
 
     
 if __name__ == '__main__':

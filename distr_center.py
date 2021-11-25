@@ -2,6 +2,7 @@ import numpy as np
 import simpy
 
 from config import DRONE_BATTERY_CAPACITY, DRONE_MIN_SAFE_BATTERY
+from utils import min_to_str
 
 class DistrCenter:
 
@@ -44,32 +45,30 @@ class DistrCenter:
                 drone.is_available = False
 
                 # Leave base
-                print(
-                    "t={}\tDrone leaving base -- drone ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
-                        str(env.now).zfill(3), drone.id, hospital.hospitalID, amount, env.now - t0))
-                yield env.timeout(round(drone.calculate_delivery_time(hospital, self)))
+                print("{}\tDrone leaving base -- drone ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
+                        min_to_str(env.now), drone.id, hospital.hospitalID, amount, env.now - t0))
+                yield env.timeout(drone.calculate_delivery_time(hospital, self))
 
                 # Deliver blood
-                print(
-                    "t={}\tBlood delivered -- drone ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
-                        str(env.now).zfill(3), drone.id, hospital.hospitalID, amount, env.now - t0))
+                print("{}\tBlood delivered -- drone ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
+                        min_to_str(env.now), drone.id, hospital.hospitalID, amount, env.now - t0))
                 self.plot.add_deliver(env.now, amount, len(self.drones))  # Add point to plot
-                yield env.timeout(round(drone.calculate_delivery_time(hospital, self)))
+                yield env.timeout(drone.calculate_delivery_time(hospital, self))
 
                 # Return to base
                 trip_consumption = drone.calculate_delivery_power_consumption(hospital, self)     
                 self.plot.add_consumptions(env.now, trip_consumption, len(self.drones))
 
                 drone.current_battery = round(drone.current_battery - trip_consumption, 5)  # Update battery status
-                print("t={}\tDrone back at base -- drone ID: {}, battery left: {} kWh, time from request: {},".format(
-                    str(env.now).zfill(3), drone.id, drone.current_battery, env.now - t0))
+                print("{}\tDrone back at base -- drone ID: {}, battery left: {} kWh, time from request: {},".format(
+                    min_to_str(env.now), drone.id, drone.current_battery, env.now - t0))
 
                 # Recharge if battery is below min safe level
                 if drone.current_battery < DRONE_MIN_SAFE_BATTERY:
-                    yield env.timeout(round(drone.charging_time()))
+                    yield env.timeout(drone.charging_time())
                     drone.current_battery = DRONE_BATTERY_CAPACITY
-                    print("t={}\tDrone charged -- drone ID: {}, time from request: {}".format(
-                        str(env.now).zfill(3), drone.id, env.now - t0))
+                    print("{}\tDrone charged -- drone ID: {}, time from request: {}".format(
+                        min_to_str(env.now), drone.id, env.now - t0))
 
                 drone.is_available = True
 
@@ -99,7 +98,7 @@ class DistrCenter:
                ambulance.is_available = True
 
         else:
-            raise ValueError("Invalid simulation mode")
+            raise ValueError("{} is not valid simulation mode".format(mode))
 
 
 

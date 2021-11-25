@@ -2,6 +2,7 @@ import simpy
 import random
 
 from config import DRONE_BLOOD_CAPACITY
+from utils import min_to_str
 
 class Hospital:
 
@@ -27,8 +28,8 @@ class Hospital:
                     env.process(self.distr_center.process_blood_request(env, self, left_to_req, mode))
                 else:
                     env.process(self.distr_center.process_blood_request(env, self, amount, mode))
-                print("t={}\tBlood requested -- hospital ID: {}, amount: {}".format(
-                    str(env.now).zfill(3), self.hospitalID, amount))
+                print("{}\tBlood requested -- hospital ID: {}, amount: {}".format(
+                    min_to_str(env.now), self.hospitalID, amount))
                 self.plot.add_request(env.now, amount, self.firstIter)
             yield env.timeout(1)  # Wait for 1 min
 

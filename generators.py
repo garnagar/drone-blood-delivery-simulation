@@ -26,7 +26,6 @@ def generate_blood_demand_tseries_normal(amount_mean, amount_sigma, amount_min, 
             ts[t] = amount_dist.rvs(1).astype(int)
         else:  # Finish if length of series is exceeded
             break
-    print(ts)
     return ts
 
 def generate_blood_demand_tseries_catastrophe(amount_mean, amount_sigma, amount_min, amount_max, length):

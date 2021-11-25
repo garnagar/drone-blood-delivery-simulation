@@ -1,4 +1,5 @@
-from config import AMBULANCE_CONSUMPTION_PER_KM, AMBULANCE_EMISSIONS_PER_KM, AMBULANCE_FUEL_CAPACITY, AMBULANCE_TOTAL_CARRYING_CAPACITY, DIESEL_COST
+from config import AMBULANCE_CONSUMPTION_PER_KM, AMBULANCE_EMISSIONS_PER_KM, AMBULANCE_FUEL_CAPACITY, \
+    AMBULANCE_TOTAL_CARRYING_CAPACITY, DIESEL_COST, HOURS_TO_MIN
 from vehicles.vehicle import Vehicle
 
 class Ambulance(Vehicle):
@@ -26,7 +27,7 @@ class Ambulance(Vehicle):
         destination = str(hospital.location['long'])+','+str(hospital.location['lat'])
 
         eta = Vehicle.gmaps.distance_matrix(origins=origin, destinations=destination)
-        return round(eta['rows'][0]['elements'][0]['duration']['value']/3600, 4)
+        return round(eta['rows'][0]['elements'][0]['duration']['value']/3600, 4) * HOURS_TO_MIN
     
     def calculate_delivery_cost(self, hospital, dst_center):
         return DIESEL_COST*self.calculate_delivery_fuel_consumption(hospital, dst_center)
