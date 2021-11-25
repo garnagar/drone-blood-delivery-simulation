@@ -14,31 +14,34 @@ from generators import generate_blood_demand_tseries_normal, generate_blood_dema
 from config import BLOOD_AMOUNT_MEAN_NORMAL, BLOOD_AMOUNT_SIGMA_NORMAL, BLOOD_AMOUNT_MIN_NORMAL, \
     BLOOD_AMOUNT_MAX_NORMAL, BLOOD_INTERVAL_MEAN_NORMAL, BLOOD_INTERVAL_SIGMA_NORMAL, BLOOD_INTERVAL_MIN_NORMAL, \
     BLOOD_INTERVAL_MAX_NORMAL, DIST_CENTER_LONG, DIST_CENTER_LAT, BLOOD_AMOUNT_MEAN_CATASTROPHE, \
-    BLOOD_AMOUNT_MIN_CATASTROPHE, BLOOD_AMOUNT_MAX_CATASTROPHE, BLOOD_AMOUNT_SIGMA_CATASTROPHE, MAX_RESOURCE_AMOUNT, MIN_RESOURCE_AMOUNT, TIMESTEPS
+    BLOOD_AMOUNT_MIN_CATASTROPHE, BLOOD_AMOUNT_MAX_CATASTROPHE, BLOOD_AMOUNT_SIGMA_CATASTROPHE, HOSP_DATA_FILE, MAX_RESOURCE_AMOUNT, MIN_RESOURCE_AMOUNT, TIMESTEPS
 
 
 def BLOOD_AMOUNT_CATASTROPHE(args):
     pass
 
-
-def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_time):
-
-    plot = Plot2()
-    hosp_data = pd.read_csv(hospitals_data_file)
-
+def gen_(hosp_data, scenario):
     # Generate time series for all hospitals in advance
     blood_req = []
     for i in range(hosp_data.shape[0]):
-        blood_req.append(generate_blood_demand_tseries_normal(
-            BLOOD_AMOUNT_MEAN_NORMAL, BLOOD_AMOUNT_SIGMA_NORMAL, BLOOD_AMOUNT_MIN_NORMAL, BLOOD_AMOUNT_MAX_NORMAL,
-            BLOOD_INTERVAL_MEAN_NORMAL, BLOOD_INTERVAL_SIGMA_NORMAL, BLOOD_INTERVAL_MIN_NORMAL, BLOOD_INTERVAL_MAX_NORMAL,
-            sim_time
-        ))
-         
-        #blood_req.append(generate_blood_demand_tseries_catastrophe(
-        #     BLOOD_AMOUNT_MEAN_CATASTROPHE, BLOOD_AMOUNT_SIGMA_CATASTROPHE, BLOOD_AMOUNT_MIN_CATASTROPHE, BLOOD_AMOUNT_MAX_CATASTROPHE,
-        #     sim_time
-        # ))
+        if scenario == "catastrophe":
+            blood_req.append(generate_blood_demand_tseries_catastrophe(
+                BLOOD_AMOUNT_MEAN_CATASTROPHE, BLOOD_AMOUNT_SIGMA_CATASTROPHE, BLOOD_AMOUNT_MIN_CATASTROPHE, BLOOD_AMOUNT_MAX_CATASTROPHE,
+                TIMESTEPS
+            ))
+
+        else:
+            blood_req.append(generate_blood_demand_tseries_normal(
+                BLOOD_AMOUNT_MEAN_NORMAL, BLOOD_AMOUNT_SIGMA_NORMAL, BLOOD_AMOUNT_MIN_NORMAL, BLOOD_AMOUNT_MAX_NORMAL,
+                BLOOD_INTERVAL_MEAN_NORMAL, BLOOD_INTERVAL_SIGMA_NORMAL, BLOOD_INTERVAL_MIN_NORMAL, BLOOD_INTERVAL_MAX_NORMAL,
+                TIMESTEPS
+            ))
+    
+    return blood_req
+
+def run_testcase(hosp_data, min_resources, max_resources, mode, sim_time, blood_req):
+
+    plot = Plot2(mode)
 
     # Run simulations for amounts of resources within range
     for r in range(min_resources, max_resources + 1):
@@ -68,8 +71,14 @@ def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_ti
     plot.plot()
 
 def main():
+    hosp_data = pd.read_csv(HOSP_DATA_FILE)
 
-    run_testcase('resources/tc1_hospitals.csv', MIN_RESOURCE_AMOUNT, MAX_RESOURCE_AMOUNT, 'drones', TIMESTEPS)
+    blood_req = gen_(hosp_data, "normal")
+
+    run_testcase(hosp_data, MIN_RESOURCE_AMOUNT, MAX_RESOURCE_AMOUNT, 'drones', TIMESTEPS, blood_req)
+    run_testcase(hosp_data, MIN_RESOURCE_AMOUNT, MAX_RESOURCE_AMOUNT, 'ambulances', TIMESTEPS, blood_req)
+
+    plt.show()
 
     
 if __name__ == '__main__':

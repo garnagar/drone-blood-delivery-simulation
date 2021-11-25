@@ -37,6 +37,7 @@ class DistrCenter:
 
         # Drone simulation run
         if mode == 'drones':
+            res_amount = len(self.drones)
             with self.drones_resource.request() as req:
                 t0 = env.now  # Get time stamp
                 yield req  # Wait until drone is available
@@ -52,12 +53,17 @@ class DistrCenter:
                 # Deliver blood
                 print("{}\tBlood delivered -- drone ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
                         min_to_str(env.now), drone.id, hospital.hospitalID, amount, env.now - t0))
-                self.plot.add_deliver(env.now, amount, len(self.drones))  # Add point to plot
+                self.plot.add_deliver(env.now, amount, res_amount)  # Add point to plot
                 yield env.timeout(drone.calculate_delivery_time(hospital, self))
 
                 # Return to base
                 trip_consumption = drone.calculate_delivery_power_consumption(hospital, self)     
-                self.plot.add_consumptions(env.now, trip_consumption, len(self.drones))
+                trip_cost = drone.calculate_delivery_cost(hospital, self)
+                trip_emission = drone.calculate_delivery_emissions(hospital, self)
+                
+                self.plot.add_consumptions(env.now, trip_consumption, res_amount)
+                self.plot.add_cost(env.now, trip_cost, res_amount)
+                self.plot.add_emission(env.now, trip_emission, res_amount)
 
                 drone.current_battery = round(drone.current_battery - trip_consumption, 5)  # Update battery status
                 print("{}\tDrone back at base -- drone ID: {}, battery left: {} kWh, time from request: {},".format(
@@ -74,6 +80,7 @@ class DistrCenter:
 
         # Ambulance simulation run
         elif mode == 'ambulances':
+            res_amount = len(self.ambulances)
             with self.ambulances_resource.request() as req:
                t0 = env.now # Get time stamp
                yield req # Wait until ambulance is available
@@ -95,6 +102,15 @@ class DistrCenter:
                # Return to base
                print("t={}\tAmbulance back at base -- ambulance ID: {}, time from request: {}".format(
                    str(env.now).zfill(3), ambulance.id, env.now - t0))
+
+               trip_consumption = ambulance.calculate_delivery_fuel_consumption(hospital, self)     
+               trip_cost = ambulance.calculate_delivery_cost(hospital, self)
+               trip_emission = ambulance.calculate_delivery_emissions(hospital, self)
+               
+               self.plot.add_consumptions(env.now, trip_consumption, res_amount)
+               self.plot.add_cost(env.now, trip_cost, res_amount)
+               self.plot.add_emission(env.now, trip_emission, res_amount)
+
                ambulance.is_available = True
 
         else:
