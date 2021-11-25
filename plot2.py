@@ -114,5 +114,5 @@ class Plot2():
 
         for r in self.emissionX:
             axs[3].plot(self.emissionX[r], self.emissionY[r], '-x', label="Emissions, resources: {}".format(r))
-        axs[3].set(xlabel='Time [min]', ylabel='g of CO2')
+        axs[3].set(xlabel='Time [min]', ylabel='CO2 [kg]')
         axs[3].legend()

@@ -1,4 +1,4 @@
-from config import AMBULANCE_CONSUMPTION_PER_KM, AMBULANCE_EMISSIONS_PER_KM, AMBULANCE_FUEL_CAPACITY, \
+from config import AMBULANCE_CONSUMPTION_PER_KM, AMBULANCE_EMISSIONS_PER_KM, AMBULANCE_EMISSIONS_PER_LITER, AMBULANCE_FUEL_CAPACITY, \
     AMBULANCE_TOTAL_CARRYING_CAPACITY, DIESEL_COST, HOURS_TO_MIN
 from vehicles.vehicle import Vehicle
 
@@ -31,3 +31,6 @@ class Ambulance(Vehicle):
     
     def calculate_delivery_cost(self, hospital, dst_center):
         return DIESEL_COST*self.calculate_delivery_fuel_consumption(hospital, dst_center)
+    
+    def calculate_delivery_emissions(self, hospital, dst_center):
+        return AMBULANCE_EMISSIONS_PER_LITER * self.calculate_delivery_fuel_consumption(hospital, dst_center)

@@ -1,5 +1,5 @@
 from config import DRONE_BATTERY_CAPACITY, DRONE_CHARGING_SPEED, DRONE_CONSUMPTION_PER_KM, DRONE_CRUISING_SPEED, \
-                   DRONE_EMISSIONS_PER_KM, DRONE_TOTAL_CARRYING_CAPACITY, ELECTRICITY_COST, HOURS_TO_MIN
+                   DRONE_EMISSIONS_PER_KM, DRONE_EMISSIONS_PER_KWH, DRONE_TOTAL_CARRYING_CAPACITY, ELECTRICITY_COST, HOURS_TO_MIN
 from vehicles.vehicle import Vehicle
 from geopy import distance
 
@@ -30,3 +30,6 @@ class Drone(Vehicle):
 
     def calculate_delivery_cost(self, hospital, dst_center):
         return ELECTRICITY_COST * self.calculate_delivery_power_consumption(hospital, dst_center)
+    
+    def calculate_delivery_emissions(self, hospital, dst_center):
+        return DRONE_EMISSIONS_PER_KWH * self.calculate_delivery_power_consumption(hospital, dst_center)

@@ -18,7 +18,7 @@ class Vehicle:
         pass
 
     def calculate_delivery_emissions(self, hospital, dst_center):
-        return self.km_emissions*self.get_distance_hospital(hospital, dst_center)
+        pass
 
     def get_distance_hospital(self, hospital, dst_center):
         pass
