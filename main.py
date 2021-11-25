@@ -69,7 +69,7 @@ def run_testcase(hospitals_data_file, min_resources, max_resources, mode, sim_ti
 
 def main():
 
-    run_testcase('resources/tc1_hospitals.csv', 1, 2, 'ambulances', TIMESTEPS)
+    run_testcase('resources/tc1_hospitals.csv', MIN_RESOURCE_AMOUNT, MAX_RESOURCE_AMOUNT, 'drones', TIMESTEPS)
 
     
 if __name__ == '__main__':

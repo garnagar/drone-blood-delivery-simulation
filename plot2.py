@@ -12,6 +12,10 @@ class Plot2():
         self.deliveredX = {}
         self.delivered_total = {}
 
+        self.consumptionY = {}
+        self.consumptionX = {}
+        self.consumption_total = {}
+
     def add_request(self, step, amount, flag):
         if flag is False:
             return
@@ -33,16 +37,35 @@ class Plot2():
         self.deliveredY[resource_amount].append(self.delivered_total[resource_amount])
 
     def add_consumptions(self, step, consumption, resource_amount):
-        pass
+        if resource_amount not in self.consumptionX.keys():
+            self.consumptionX.update({resource_amount: [0]})
+        self.consumptionX[resource_amount].append(step)
 
+        if resource_amount not in self.consumption_total.keys():
+            self.consumption_total.update({resource_amount: 0})
+        self.consumption_total[resource_amount] += consumption
+
+        if resource_amount not in self.consumptionY.keys():
+            self.consumptionY.update({resource_amount: [0]})
+        self.consumptionY[resource_amount].append(self.consumption_total[resource_amount])
+        
     def plot(self):
-        plt.plot(self.requestedX, self.requestedY, '-x', label="Requested")
+        fig, axs = plt.subplots(2)
+        fig.suptitle('MBSE')
+        
+        axs[0].plot(self.requestedX, self.requestedY, '-x', label="Requested")
         print(self.deliveredX)
         for r in self.deliveredX:
-            plt.plot(self.deliveredX[r], self.deliveredY[r], '--x', label="Delivered, resources: {}".format(r))
-        plt.xlabel("Time [min]")
-        plt.ylabel("Blood units")
-        plt.legend()
+            axs[0].plot(self.deliveredX[r], self.deliveredY[r], '--x', label="Delivered, resources: {}".format(r))
+        
+        axs[0].set(xlabel='Time [min]', ylabel='Blood units')
+        axs[0].legend()
+
+        for r in self.consumptionX:
+            axs[1].plot(self.consumptionX[r], self.consumptionY[r], '-x', label="Consumption, resources: {}".format(r))
+        axs[1].set(xlabel='Time [min]', ylabel='kWh')
+        axs[1].legend()
         plt.show()
 
+        
 
