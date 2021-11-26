@@ -3,55 +3,52 @@ import matplotlib.pyplot as plt
 
 class Plot2():
 
-    def __init__(self, mode):
-        self.mode = mode
-        self.requestedY = [0]
+    def __init__(self):
+        self.fig, self.axs = plt.subplots(5)
+
         self.requestedX = [0]
+        self.requestedY = [0]
         self.requested_total = 0
 
-        self.deliveredY = {}
         self.deliveredX = {}
+        self.deliveredY = {}
         self.delivered_total = {}
 
-        self.consumptionY = {}
-        self.consumptionX = {}
-        self.consumption_total = {}
+        self.power_consumptionX = {}
+        self.power_consumptionY = {}
+        self.power_consumption_total = {}
 
-        self.costY = {}
+        self.fuel_consumptionX = {}
+        self.fuel_consumptionY = {}
+        self.fuel_consumption_total = {}
+
         self.costX = {}
+        self.costY = {}
         self.cost_total = {}
 
-        self.emissionY = {}
         self.emissionX = {}
+        self.emissionY = {}
         self.emission_total = {}
 
-    def add_emission(self, step, emission, resource_amount):
-        if resource_amount not in self.emissionX.keys():
-            self.emissionX.update({resource_amount: [0]})
-        self.emissionX[resource_amount].append(step)
+    def __add_data_point(self, x_data, y_data, total, step, value, resource_amount):
+        if resource_amount not in x_data.keys():
+            x_data.update({resource_amount: [0]})
+        x_data[resource_amount].append(step)
 
-        if resource_amount not in self.emission_total.keys():
-            self.emission_total.update({resource_amount: 0})
-        self.emission_total[resource_amount] += emission
+        if resource_amount not in total.keys():
+            total.update({resource_amount: 0})
+        total[resource_amount] += value
 
-        if resource_amount not in self.emissionY.keys():
-            self.emissionY.update({resource_amount: [0]})
-        self.emissionY[resource_amount].append(self.emission_total[resource_amount])
+        if resource_amount not in y_data.keys():
+            y_data.update({resource_amount: [0]})
+        y_data[resource_amount].append(total[resource_amount])
 
-
-    def add_cost(self, step, cost, resource_amount):
-        if resource_amount not in self.costX.keys():
-            self.costX.update({resource_amount: [0]})
-        self.costX[resource_amount].append(step)
-
-        if resource_amount not in self.cost_total.keys():
-            self.cost_total.update({resource_amount: 0})
-        self.cost_total[resource_amount] += cost
-
-        if resource_amount not in self.costY.keys():
-            self.costY.update({resource_amount: [0]})
-        self.costY[resource_amount].append(self.cost_total[resource_amount])
-
+    def __plot_subplot(self, subplt, data_x, data_y, style, ylabel, legend_label):
+        for r in data_x:
+            subplt.plot(data_x[r], data_y[r], style, label=(legend_label + str(r)))
+        if ylabel is not None:
+            subplt.set(ylabel=ylabel)
+        subplt.legend()
 
     def add_request(self, step, amount, flag):
         if flag is False:
@@ -60,59 +57,64 @@ class Plot2():
         self.requested_total += amount
         self.requestedY.append(self.requested_total)
 
-    def add_deliver(self, step, amount, resource_amount):
-        if resource_amount not in self.deliveredX.keys():
-            self.deliveredX.update({resource_amount: [0]})
-        self.deliveredX[resource_amount].append(step)
+    def add_delivery(self, step, amount, resource_amount):
+        self.__add_data_point(self.deliveredX, self.deliveredY, self.delivered_total,
+                              step, amount, resource_amount)
 
-        if resource_amount not in self.delivered_total.keys():
-            self.delivered_total.update({resource_amount: 0})
-        self.delivered_total[resource_amount] += amount
+    def add_emission(self, step, emission, resource_amount):
+        self.__add_data_point(self.emissionX, self.emissionY, self.emission_total,
+                              step, emission, resource_amount)
 
-        if resource_amount not in self.deliveredY.keys():
-            self.deliveredY.update({resource_amount: [0]})
-        self.deliveredY[resource_amount].append(self.delivered_total[resource_amount])
 
-    def add_consumptions(self, step, consumption, resource_amount):
-        if resource_amount not in self.consumptionX.keys():
-            self.consumptionX.update({resource_amount: [0]})
-        self.consumptionX[resource_amount].append(step)
+    def add_cost(self, step, cost, resource_amount):
+        self.__add_data_point(self.costX, self.costY, self.cost_total,
+                              step, cost, resource_amount)
 
-        if resource_amount not in self.consumption_total.keys():
-            self.consumption_total.update({resource_amount: 0})
-        self.consumption_total[resource_amount] += consumption
+    def add_power_consumption(self, step, consumption, resource_amount):
+        self.__add_data_point(self.power_consumptionX, self.power_consumptionY, self.power_consumption_total,
+                              step, consumption, resource_amount)
 
-        if resource_amount not in self.consumptionY.keys():
-            self.consumptionY.update({resource_amount: [0]})
-        self.consumptionY[resource_amount].append(self.consumption_total[resource_amount])
+    def add_fuel_consumption(self, step, consumption, resource_amount):
+        self.__add_data_point(self.fuel_consumptionX, self.fuel_consumptionY, self.fuel_consumption_total,
+                              step, consumption, resource_amount)
         
-    def plot(self):
-        if self.mode == 'ambulances':
-            consumption_unit = 'l (liters)'
-        else:
-            consumption_unit = 'kWh (kilowatt-hour)'
+    def plot_data(self):
 
-        fig, axs = plt.subplots(4)
-        fig.suptitle('Blood delivering through '+str(self.mode))
+        self.fig.suptitle('Blood delivery')
         
-        axs[0].plot(self.requestedX, self.requestedY, '-x', label="Requested")
-        for r in self.deliveredX:
-            axs[0].plot(self.deliveredX[r], self.deliveredY[r], '--x', label="Delivered, resources: {}".format(r))
-        
-        axs[0].set(ylabel='Blood units')
-        axs[0].legend()
+        self.axs[0].plot(self.requestedX, self.requestedY, '-x', label="Requested")
+        self.__plot_subplot(self.axs[0], self.deliveredX, self.deliveredY, '--x', "Blood units", "Delivered, resources: ")
+        self.__plot_subplot(self.axs[1], self.power_consumptionX, self.power_consumptionY, '-x', "Power [kWh]", "Consumption, resources: ")
+        self.__plot_subplot(self.axs[2], self.fuel_consumptionX, self.fuel_consumptionY, '-x', "Fuel [L]", "Consumption, resources: ")
+        self.__plot_subplot(self.axs[3], self.costX, self.costY, '-x', "Cost [€]", "Cost, resources: ")
+        self.__plot_subplot(self.axs[4], self.emissionX, self.emissionY, '-x', "Emissions [kg of CO2]", "Emissions, resources: ")
+        self.axs[-1].set(xlabel='Time [min]')
 
-        for r in self.consumptionX:
-            axs[1].plot(self.consumptionX[r], self.consumptionY[r], '-x', label="Consumption, resources: {}".format(r))
-        axs[1].set(ylabel=consumption_unit)
-        axs[1].legend()
+    def show(self):
+        plt.show()
 
-        for r in self.costX:
-            axs[2].plot(self.costX[r], self.costY[r], '-x', label="Cost, resources: {}".format(r))
-        axs[2].set(ylabel='€')
-        axs[2].legend()
+    def reset_data(self):
+        self.requestedX = [0]
+        self.requestedY = [0]
+        self.requested_total = 0
 
-        for r in self.emissionX:
-            axs[3].plot(self.emissionX[r], self.emissionY[r], '-x', label="Emissions, resources: {}".format(r))
-        axs[3].set(xlabel='Time [min]', ylabel='CO2 [kg]')
-        axs[3].legend()
+        self.deliveredX = {}
+        self.deliveredY = {}
+        self.delivered_total = {}
+
+        self.power_consumptionX = {}
+        self.power_consumptionY = {}
+        self.power_consumption_total = {}
+
+        self.fuel_consumptionX = {}
+        self.fuel_consumptionY = {}
+        self.fuel_consumption_total = {}
+
+        self.costX = {}
+        self.costY = {}
+        self.cost_total = {}
+
+        self.emissionX = {}
+        self.emissionY = {}
+        self.emission_total = {}
+

@@ -39,13 +39,13 @@ def gen_(hosp_data, scenario):
     
     return blood_req
 
-def run_testcase(hosp_data, min_resources, max_resources, mode, sim_time, blood_req):
+def run_testcase(plot, hosp_data, min_resources, max_resources, mode, sim_time, blood_req):
 
-    plot = Plot2(mode)
+
+    firstIter = True
 
     # Run simulations for amounts of resources within range
     for r in range(min_resources, max_resources + 1):
-        firstIter = True
 
         if r > min_resources:
             firstIter = False
@@ -68,19 +68,22 @@ def run_testcase(hosp_data, min_resources, max_resources, mode, sim_time, blood_
 
         env.run(until=sim_time)
 
-    plot.plot()
+    plot.plot_data()
+    plot.reset_data()
 
 def main():
     hosp_data = pd.read_csv(HOSP_DATA_FILE)
 
     blood_req = gen_(hosp_data, "normal")
 
-    run_testcase(hosp_data, MIN_RESOURCE_AMOUNT, MAX_RESOURCE_AMOUNT, 'drones', TIMESTEPS, blood_req)
-    run_testcase(hosp_data, MIN_RESOURCE_AMOUNT, MAX_RESOURCE_AMOUNT, 'ambulances', TIMESTEPS, blood_req)
+    plot = Plot2()
 
-    plt.show()
+    run_testcase(plot, hosp_data, MIN_RESOURCE_AMOUNT, MAX_RESOURCE_AMOUNT, 'drones', TIMESTEPS, blood_req)
+    run_testcase(plot, hosp_data, MIN_RESOURCE_AMOUNT, MAX_RESOURCE_AMOUNT, 'ambulances', TIMESTEPS, blood_req)
 
-    
+    plot.show()
+
+
 if __name__ == '__main__':
     main()
 
