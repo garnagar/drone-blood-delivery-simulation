@@ -16,8 +16,6 @@ def generate_blood_demand_tseries_normal(amount_mean, amount_sigma, amount_min, 
     b = (t_max - t_mean) / t_sigma
     t_dist = stats.truncnorm(a, b, loc=t_mean, scale=t_sigma)
 
-
-
     # Generate time series
     t = 0
     while True:

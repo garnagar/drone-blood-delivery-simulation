@@ -3,8 +3,10 @@ import matplotlib.pyplot as plt
 
 class Plot2():
 
-    def __init__(self):
-        self.fig, self.axs = plt.subplots(5)
+    def __init__(self, enable_blood=True, enable_power=False, enable_fuel=False, enable_cost=False, enable_emissions=False):
+        self.enable = np.array([enable_blood, enable_power, enable_fuel, enable_cost, enable_emissions])
+        self.fig, self.axs = plt.subplots(np.count_nonzero(self.enable))
+        self.isFirst = True
 
         self.requestedX = [0]
         self.requestedY = [0]
@@ -43,9 +45,9 @@ class Plot2():
             y_data.update({resource_amount: [0]})
         y_data[resource_amount].append(total[resource_amount])
 
-    def __plot_subplot(self, subplt, data_x, data_y, style, ylabel, legend_label):
+    def __plot_subplot(self, subplt, data_x, data_y, style, ylabel, legend_label, mode_label):
         for r in data_x:
-            subplt.plot(data_x[r], data_y[r], style, label=(legend_label + str(r)))
+            subplt.plot(data_x[r], data_y[r], style, label="{}{} {}".format(legend_label, r, mode_label))
         if ylabel is not None:
             subplt.set(ylabel=ylabel)
         subplt.legend()
@@ -78,16 +80,29 @@ class Plot2():
         self.__add_data_point(self.fuel_consumptionX, self.fuel_consumptionY, self.fuel_consumption_total,
                               step, consumption, resource_amount)
         
-    def plot_data(self):
+    def plot_data(self, mode):
 
-        self.fig.suptitle('Blood delivery')
-        
-        self.axs[0].plot(self.requestedX, self.requestedY, '-x', label="Requested")
-        self.__plot_subplot(self.axs[0], self.deliveredX, self.deliveredY, '--x', "Blood units", "Delivered, resources: ")
-        self.__plot_subplot(self.axs[1], self.power_consumptionX, self.power_consumptionY, '-x', "Power [kWh]", "Consumption, resources: ")
-        self.__plot_subplot(self.axs[2], self.fuel_consumptionX, self.fuel_consumptionY, '-x', "Fuel [L]", "Consumption, resources: ")
-        self.__plot_subplot(self.axs[3], self.costX, self.costY, '-x', "Cost [€]", "Cost, resources: ")
-        self.__plot_subplot(self.axs[4], self.emissionX, self.emissionY, '-x', "Emissions [kg of CO2]", "Emissions, resources: ")
+        n = 0
+
+        if self.enable[0]:
+            if self.isFirst:
+                self.axs[n].plot(self.requestedX, self.requestedY, 'k-x', label="requested")
+            self.isFirst = False
+            self.__plot_subplot(self.axs[n], self.deliveredX, self.deliveredY, '-x', "Blood units", "delivered, ", mode)
+
+        if self.enable[1]:
+            n += 1
+            self.__plot_subplot(self.axs[n], self.power_consumptionX, self.power_consumptionY, '-x', "Power [kWh]", "", mode)
+        if self.enable[2]:
+            n += 1
+            self.__plot_subplot(self.axs[n], self.fuel_consumptionX, self.fuel_consumptionY, '-x', "Fuel [L]", "", mode)
+        if self.enable[3]:
+            n += 1
+            self.__plot_subplot(self.axs[n], self.costX, self.costY, '-x', "Cost [€]", "", mode)
+        if self.enable[4]:
+            n += 1
+            self.__plot_subplot(self.axs[n], self.emissionX, self.emissionY, '-x', "Emissions [kg of CO2]", "", mode)
+
         self.axs[-1].set(xlabel='Time [min]')
 
     def show(self):
