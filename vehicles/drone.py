@@ -14,19 +14,19 @@ class Drone(Vehicle):
         self.speed = DRONE_CRUISING_SPEED
 
     def calculate_delivery_power_consumption(self, hospital, dst_center):
-        return self.get_distance_hospital(hospital, dst_center) * self.km_consumption
+        return self.get_distance(hospital, dst_center) * self.km_consumption
 
     def charging_time(self):
         return ((self.battery_capacity-self.current_battery)/self.charging_speed) * HOURS_TO_MIN
     
-    def get_distance_hospital(self, hospital, dst_center):
-        origin = (dst_center.location['long'], dst_center.location['lat'])
-        destination = (hospital.location['long'], hospital.location['lat'])
-        dist = distance.distance(origin, destination).km
+    def get_distance(self, origin, destination):
+        ori_coord = (origin.location['long'], origin.location['lat'])
+        dst_coord = (destination.location['long'], destination.location['lat'])
+        dist = distance.distance(ori_coord, dst_coord).km
         return round(dist, 2)
 
-    def calculate_delivery_time(self, hospital, dst_center):
-        return round(self.get_distance_hospital(hospital, dst_center)/self.speed, 2) * HOURS_TO_MIN
+    def get_eta(self, origin, destination):
+        return round(self.get_distance(origin, destination)/self.speed, 2) * HOURS_TO_MIN
 
     def calculate_delivery_cost(self, hospital, dst_center):
         return ELECTRICITY_COST * self.calculate_delivery_power_consumption(hospital, dst_center)

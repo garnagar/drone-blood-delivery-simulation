@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 class Plot2():
 
-    def __init__(self, enable_blood=True, enable_power=False, enable_fuel=False, enable_cost=False, enable_emissions=False):
-        self.enable = np.array([enable_blood, enable_power, enable_fuel, enable_cost, enable_emissions])
+    def __init__(self, enable_blood=True, enable_power=False, enable_fuel=False, enable_cost=False, enable_emissions=False, enable_travel=False):
+        self.enable = np.array([enable_blood, enable_power, enable_fuel, enable_cost, enable_emissions, enable_travel])
         self.fig, self.axs = plt.subplots(np.count_nonzero(self.enable))
         self.isFirst = True
 
@@ -31,6 +31,10 @@ class Plot2():
         self.emissionX = {}
         self.emissionY = {}
         self.emission_total = {}
+
+        self.travelX = {}
+        self.travelY = {}
+        self.travel_total = {}
 
     def __add_data_point(self, x_data, y_data, total, step, value, resource_amount):
         if resource_amount not in x_data.keys():
@@ -67,6 +71,9 @@ class Plot2():
         self.__add_data_point(self.emissionX, self.emissionY, self.emission_total,
                               step, emission, resource_amount)
 
+    def add_travel(self, step, value, resource_amount):
+        self.__add_data_point(self.travelX, self.travelY, self.travel_total, 
+                                step, value, resource_amount)
 
     def add_cost(self, step, cost, resource_amount):
         self.__add_data_point(self.costX, self.costY, self.cost_total,
@@ -102,6 +109,9 @@ class Plot2():
         if self.enable[4]:
             n += 1
             self.__plot_subplot(self.axs[n], self.emissionX, self.emissionY, '-x', "Emissions [kg of CO2]", "", mode)
+        if self.enable[5]:
+            n += 1
+            self.__plot_subplot(self.axs[n], self.travelX, self.travelY, '-x', 'Distance traveled [km]', "", mode)
 
         self.axs[-1].set(xlabel='Time [min]')
 
@@ -132,4 +142,8 @@ class Plot2():
         self.emissionX = {}
         self.emissionY = {}
         self.emission_total = {}
+
+        self.travelX = {}
+        self.travelY = {}
+        self.travel_total = {}
 

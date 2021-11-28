@@ -11,7 +11,7 @@ class Vehicle:
         self.current_carrying_capacity = total_carrying_capacity
         self.is_available = is_available
 
-    def calculate_delivery_time(self, hospital, dst_center):
+    def get_eta(self, origin, destination):
         pass
 
     def calculate_delivery_cost(self, hospital, dst_center):
@@ -20,5 +20,5 @@ class Vehicle:
     def calculate_delivery_emissions(self, hospital, dst_center):
         pass
 
-    def get_distance_hospital(self, hospital, dst_center):
+    def get_distance(self, origin, destination):
         pass

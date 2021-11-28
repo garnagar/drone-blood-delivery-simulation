@@ -76,7 +76,7 @@ def main():
     # Edit this code to produce graphs you need:
 
     # 1. Select what will be plotted by setting enables
-    plot = Plot2(enable_blood=True, enable_power=False, enable_fuel=False, enable_cost=True, enable_emissions=True)
+    plot = Plot2(enable_blood=True, enable_power=False, enable_fuel=False, enable_cost=False, enable_emissions=False, enable_travel=True)
 
     # 2. Select CSV file with hospital data and blood demand scenario as 'normal' or 'catastrophe'
     hosp_data, blood_req = get_sim_data('resources/tc1.csv', 'normal')

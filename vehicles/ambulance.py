@@ -11,22 +11,21 @@ class Ambulance(Vehicle):
         self.current_fuel_capacity = AMBULANCE_FUEL_CAPACITY
 
     def calculate_delivery_fuel_consumption(self, hospital, dst_center):
-        return self.get_distance_hospital(hospital, dst_center)*self.km_consumption
+        return self.get_distance(hospital, dst_center)*self.km_consumption
 
-    def get_distance_hospital(self, hospital, dst_center):
-        origin = str(dst_center.location['long'])+','+str(dst_center.location['lat'])
-        destination = str(hospital.location['long'])+','+str(hospital.location['lat'])
+    def get_distance(self, origin, destination):
+        ori_coord = str(origin.location['long'])+','+str(origin.location['lat'])
+        dst_coord = str(destination.location['long'])+','+str(destination.location['lat'])
 
-        dist = Vehicle.gmaps.distance_matrix(origins=origin, destinations=destination)
+        dist = Vehicle.gmaps.distance_matrix(origins=ori_coord, destinations=dst_coord)
 
         return round(dist['rows'][0]['elements'][0]['distance']['value']/1000, 2)
 
-    # this is rtt = 2*one way
-    def calculate_delivery_time(self, hospital, dst_center):
-        origin = str(dst_center.location['long'])+','+str(dst_center.location['lat'])
-        destination = str(hospital.location['long'])+','+str(hospital.location['lat'])
+    def get_eta(self, origin, destination):
+        ori_coord = str(origin.location['long'])+','+str(origin.location['lat'])
+        dst_coord = str(destination.location['long'])+','+str(destination.location['lat'])
 
-        eta = Vehicle.gmaps.distance_matrix(origins=origin, destinations=destination)
+        eta = Vehicle.gmaps.distance_matrix(origins=ori_coord, destinations=dst_coord)
         return round(eta['rows'][0]['elements'][0]['duration']['value']/3600, 4) * HOURS_TO_MIN
     
     def calculate_delivery_cost(self, hospital, dst_center):
