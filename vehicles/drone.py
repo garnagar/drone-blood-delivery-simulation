@@ -20,10 +20,13 @@ class Drone(Vehicle):
         return ((self.battery_capacity-self.current_battery)/self.charging_speed) * HOURS_TO_MIN
     
     def get_distance(self, origin, destination):
-        ori_coord = (origin.location['long'], origin.location['lat'])
-        dst_coord = (destination.location['long'], destination.location['lat'])
+        ori_coord = (origin.location['lat'], origin.location['long'])
+        dst_coord = (destination.location['lat'], destination.location['long'])
+
         dist = distance.distance(ori_coord, dst_coord).km
+
         return round(dist, 2)
+
 
     def get_eta(self, origin, destination):
         return round(self.get_distance(origin, destination)/self.speed, 2) * HOURS_TO_MIN

@@ -14,10 +14,15 @@ class Ambulance(Vehicle):
         return self.get_distance(hospital, dst_center)*self.km_consumption
 
     def get_distance(self, origin, destination):
-        ori_coord = str(origin.location['long'])+','+str(origin.location['lat'])
-        dst_coord = str(destination.location['long'])+','+str(destination.location['lat'])
+        print("###################################")
+        ori_coord = str(origin.location['lat'])+','+str(origin.location['long'])
+        dst_coord = str(destination.location['lat'])+','+str(destination.location['long'])
+
+        print(ori_coord)
+        print(dst_coord)
 
         dist = Vehicle.gmaps.distance_matrix(origins=ori_coord, destinations=dst_coord)
+        print(dist)
 
         return round(dist['rows'][0]['elements'][0]['distance']['value']/1000, 2)
 
