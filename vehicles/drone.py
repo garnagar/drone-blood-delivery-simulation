@@ -22,7 +22,7 @@ class Drone(Vehicle):
     def get_distance(self, origin, destination):
         ori_coord = (origin.location['lat'], origin.location['long'])
         dst_coord = (destination.location['lat'], destination.location['long'])
-
+        
         dist = distance.distance(ori_coord, dst_coord).km
 
         return round(dist, 2)

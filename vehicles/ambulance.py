@@ -18,8 +18,8 @@ class Ambulance(Vehicle):
         ori_coord = str(origin.location['lat'])+','+str(origin.location['long'])
         dst_coord = str(destination.location['lat'])+','+str(destination.location['long'])
 
-        print(ori_coord)
-        print(dst_coord)
+        print(ori_coord, dst_coord)
+        print(type(origin), type(destination))
 
         dist = Vehicle.gmaps.distance_matrix(origins=ori_coord, destinations=dst_coord)
         print(dist)
