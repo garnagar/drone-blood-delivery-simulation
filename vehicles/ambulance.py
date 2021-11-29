@@ -14,23 +14,19 @@ class Ambulance(Vehicle):
         return self.get_distance(hospital, dst_center)*self.km_consumption
 
     def get_distance(self, origin, destination):
-        print("###################################")
         ori_coord = str(origin.location['lat'])+','+str(origin.location['long'])
         dst_coord = str(destination.location['lat'])+','+str(destination.location['long'])
 
-        print(ori_coord, dst_coord)
-        print(type(origin), type(destination))
-
         dist = Vehicle.gmaps.distance_matrix(origins=ori_coord, destinations=dst_coord)
-        print(dist)
 
         return round(dist['rows'][0]['elements'][0]['distance']['value']/1000, 2)
 
     def get_eta(self, origin, destination):
-        ori_coord = str(origin.location['long'])+','+str(origin.location['lat'])
-        dst_coord = str(destination.location['long'])+','+str(destination.location['lat'])
+        ori_coord = str(origin.location['lat'])+','+str(origin.location['long'])
+        dst_coord = str(destination.location['lat'])+','+str(destination.location['long'])
 
         eta = Vehicle.gmaps.distance_matrix(origins=ori_coord, destinations=dst_coord)
+
         return round(eta['rows'][0]['elements'][0]['duration']['value']/3600, 4) * HOURS_TO_MIN
     
     def calculate_delivery_cost(self, hospital, dst_center):
