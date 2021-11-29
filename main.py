@@ -76,14 +76,14 @@ def main():
     # Edit this code to produce graphs you need:
 
     # 1. Select what will be plotted by setting enables
-    plot = Plot2(enable_blood=True, enable_power=False, enable_fuel=False, enable_cost=False, enable_emissions=False, enable_travel=True)
+    plot = Plot2(enable_blood=True, enable_power=False, enable_fuel=False, enable_cost=True, enable_emissions=True, enable_travel=False)
 
     # 2. Select CSV file with hospital data and blood demand scenario as 'normal' or 'catastrophe'
-    hosp_data, blood_req = get_sim_data('resources/tc1.csv', 'normal')
+    hosp_data, blood_req = get_sim_data('resources/tc4.csv', 'catastrophe')
 
     # 3. Select simulations to run. Each run_testcase() will produce data for each resource amount and add them to plot
-    run_testcase(plot, hosp_data, blood_req, 5, 5, 'drones', TIMESTEPS)
-    run_testcase(plot, hosp_data, blood_req, 5, 5, 'ambulances', TIMESTEPS)
+    run_testcase(plot, hosp_data, blood_req, 15, 15, 'drones', TIMESTEPS)
+    run_testcase(plot, hosp_data, blood_req, 1, 1, 'ambulances', TIMESTEPS)
 
     # 4. Profit
     plot.show()

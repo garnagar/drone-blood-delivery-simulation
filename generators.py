@@ -36,13 +36,18 @@ def generate_blood_demand_tseries_catastrophe(amount_mean, amount_sigma, amount_
 
     # For a pseudorandom time
 
-    a = round(0.25*length)
-    b = round(0.75*length)
-    t = random.randint(a, b)
+    a = round(0.15*length)
+    b = round(0.35*length)
+    c = round(0.50*length)
+    d = round(0.75*length)
+    t1 = random.randint(a, b)
+    t2 = random.randint(c, d)
 
     #for a fixed time
     #t = round(0.5*length)
 
     #final time series
-    ts[t] = amount_dist.rvs(1).astype(int)
+    ts[t1] = amount_dist.rvs(1).astype(int)
+    ts[t2] = amount_dist.rvs(1).astype(int)
+
     return ts
