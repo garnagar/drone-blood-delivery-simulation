@@ -38,10 +38,11 @@ class "Ambulance" extends Vehicle {
 fuel_capacity: float
 current_fuel_capacity: float
 
-calculate_delivery_fuel_consumption(hospital)
-get_distance_hospital(hospital, dst_center)
-calculate_delivery_time(hospital, dst_center)
+calculate_delivery_fuel_consumption(hospital, dst_center)
+get_distance(origin, destination)
+get_eta(origin, destination)
 calculate_delivery_cost(hospital, dst_center)
+calculate_delivery_emissions(hospital, dst_center)
 
 }
 

@@ -41,13 +41,16 @@ class DistrCenter:
             with self.drones_resource.request() as req:
                 t0 = env.now  # Get time stamp
                 yield req  # Wait until drone is available
+                
                 # Get drone
                 drone = self.get_drone_highest_battery()
                 drone.is_available = False
                 trip_eta_1 = drone.get_eta(self, hospital)
                 trip_eta_2 = drone.get_eta(hospital, self)
-                trip_distance_1 = drone.get_distance(self, hospital)
-                trip_distance_2 = trip_distance_1
+                trip_distance = 2 * drone.get_distance(self, hospital)
+                trip_consumption = drone.calculate_delivery_power_consumption(self, hospital) + drone.calculate_delivery_power_consumption(hospital, self)
+                trip_costs = drone.calculate_delivery_cost(self, hospital) + drone.calculate_delivery_cost(hospital, self)
+                trip_emissions = drone.calculate_delivery_emissions(self, hospital) + drone.calculate_delivery_emissions(hospital, self)
 
                 # Leave base
                 print("{}\tDrone leaving base -- drone ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
@@ -57,22 +60,21 @@ class DistrCenter:
                 # Deliver blood
                 print("{}\tBlood delivered -- drone ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
                         min_to_str(env.now), drone.id, hospital.hospitalID, amount, env.now - t0))
-                self.plot.add_delivery(env.now, amount, res_amount)  # Add point to plot
+                
+                self.plot.add_delivery(env.now, amount, res_amount)
                 yield env.timeout(trip_eta_2)
 
                 # Return to base
-                trip_consumption = drone.calculate_delivery_power_consumption(hospital, self)     
-                trip_cost = drone.calculate_delivery_cost(hospital, self)
-                trip_emission = drone.calculate_delivery_emissions(hospital, self)
-                
-                self.plot.add_power_consumption(env.now, trip_consumption, res_amount)
-                self.plot.add_cost(env.now, trip_cost, res_amount)
-                self.plot.add_emission(env.now, trip_emission, res_amount)
-                self.plot.add_travel(env.now, trip_distance_1+trip_distance_2, res_amount)
-
+       
                 drone.current_battery = round(drone.current_battery - trip_consumption, 5)  # Update battery status
                 print("{}\tDrone back at base -- drone ID: {}, battery left: {} kWh, time from request: {},".format(
                     min_to_str(env.now), drone.id, drone.current_battery, env.now - t0))
+                
+                self.plot.add_power_consumption(env.now, trip_consumption, res_amount)
+                self.plot.add_cost(env.now, trip_costs, res_amount)
+                self.plot.add_emission(env.now, trip_emissions, res_amount)
+                self.plot.add_travel(env.now, trip_distance, res_amount)
+
 
                 # Recharge if battery is below min safe level
                 if drone.current_battery < DRONE_MIN_SAFE_BATTERY:
@@ -94,8 +96,10 @@ class DistrCenter:
                ambulance.is_available = False
                trip_eta_1 = ambulance.get_eta(self, hospital)
                trip_eta_2 = ambulance.get_eta(hospital, self)
-               trip_distance_1 = ambulance.get_distance(self, hospital)
-               trip_distance_2 = ambulance.get_distance(hospital, self)
+               trip_distance = ambulance.get_distance(self, hospital) + ambulance.get_distance(hospital, self)
+               trip_consumption = ambulance.calculate_delivery_fuel_consumption(self, hospital) + ambulance.calculate_delivery_fuel_consumption(hospital, self)     
+               trip_costs = ambulance.calculate_delivery_cost(self, hospital) + ambulance.calculate_delivery_cost(hospital, self)
+               trip_emissions = ambulance.calculate_delivery_emissions(self, hospital) + ambulance.calculate_delivery_emissions(hospital, self)
 
                # Leave base
                print("t={}\tAmbulance leaving base -- ambulance ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
@@ -105,22 +109,18 @@ class DistrCenter:
                # Deliver blood
                print("t={}\tBlood delivered -- ambulance ID: {}, hospital ID: {}, amount: {}, time from request: {}".format(
                    str(round((env.now), 2)).zfill(3), ambulance.id, hospital.hospitalID, amount, round((env.now - t0), 2)))
+               self.plot.add_delivery(env.now, amount, res_amount)
                
-               self.plot.add_delivery(env.now, amount, res_amount) # Add point to plot
                yield env.timeout(trip_eta_2)
                
                # Return to base
                print("t={}\tAmbulance back at base -- ambulance ID: {}, time from request: {}".format(
                    str(round((env.now), 2)).zfill(3), ambulance.id, round(env.now - t0), 2))
 
-               trip_consumption = ambulance.calculate_delivery_fuel_consumption(hospital, self)     
-               trip_cost = ambulance.calculate_delivery_cost(hospital, self)
-               trip_emission = ambulance.calculate_delivery_emissions(hospital, self)
-               
                self.plot.add_fuel_consumption(env.now, trip_consumption, res_amount)
-               self.plot.add_cost(env.now, trip_cost, res_amount)
-               self.plot.add_emission(env.now, trip_emission, res_amount)
-               self.plot.add_travel(env.now, trip_distance_1+trip_distance_2, res_amount)
+               self.plot.add_cost(env.now, trip_costs, res_amount)
+               self.plot.add_emission(env.now, trip_emissions, res_amount)
+               self.plot.add_travel(env.now, trip_distance, res_amount)
 
                ambulance.is_available = True
 

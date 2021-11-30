@@ -14,10 +14,10 @@ class Vehicle:
     def get_eta(self, origin, destination):
         pass
 
-    def calculate_delivery_cost(self, hospital, dst_center):
+    def calculate_delivery_cost(self, origin, destination):
         pass
 
-    def calculate_delivery_emissions(self, hospital, dst_center):
+    def calculate_delivery_emissions(self, origin, destination):
         pass
 
     def get_distance(self, origin, destination):

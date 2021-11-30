@@ -79,7 +79,7 @@ def main():
     plot = Plot2(enable_blood=True, enable_power=False, enable_fuel=False, enable_cost=True, enable_emissions=True, enable_travel=False)
 
     # 2. Select CSV file with hospital data and blood demand scenario as 'normal' or 'catastrophe'
-    hosp_data, blood_req = get_sim_data('resources/tc4.csv', 'catastrophe')
+    hosp_data, blood_req = get_sim_data('resources/tc2.csv', 'normal')
 
     # 3. Select simulations to run. Each run_testcase() will produce data for each resource amount and add them to plot
     run_testcase(plot, hosp_data, blood_req, 15, 15, 'drones', TIMESTEPS)

@@ -10,8 +10,8 @@ class Ambulance(Vehicle):
         self.fuel_capacity = AMBULANCE_FUEL_CAPACITY
         self.current_fuel_capacity = AMBULANCE_FUEL_CAPACITY
 
-    def calculate_delivery_fuel_consumption(self, hospital, dst_center):
-        return self.get_distance(hospital, dst_center)*self.km_consumption
+    def calculate_delivery_fuel_consumption(self, origin, destination):
+        return self.get_distance(origin, destination)*self.km_consumption
 
     def get_distance(self, origin, destination):
         ori_coord = str(origin.location['lat'])+','+str(origin.location['long'])
@@ -29,8 +29,8 @@ class Ambulance(Vehicle):
 
         return round(eta['rows'][0]['elements'][0]['duration']['value']/3600, 4) * HOURS_TO_MIN
     
-    def calculate_delivery_cost(self, hospital, dst_center):
-        return DIESEL_COST*self.calculate_delivery_fuel_consumption(hospital, dst_center)
+    def calculate_delivery_cost(self, origin, destination):
+        return DIESEL_COST*self.calculate_delivery_fuel_consumption(origin, destination)
     
-    def calculate_delivery_emissions(self, hospital, dst_center):
-        return AMBULANCE_EMISSIONS_PER_LITER * self.calculate_delivery_fuel_consumption(hospital, dst_center)
+    def calculate_delivery_emissions(self, origin, destination):
+        return AMBULANCE_EMISSIONS_PER_LITER * self.calculate_delivery_fuel_consumption(origin, destination)
