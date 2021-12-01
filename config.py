@@ -8,7 +8,7 @@ DRONE_EMISSIONS_PER_KM = 2.51               # grams of CO2 / km
 DRONE_MIN_SAFE_BATTERY = 0.25               # kWh
 ELECTRICITY_COST = 0.146                    # € / kWh
 DRONE_BLOOD_CAPACITY = 2                    # blood units
-DRONE_EMISSIONS_PER_KWH = 0.386             # kg of CO2 per kWh
+DRONE_EMISSIONS_PER_KWH = 0.116             # kg of CO2 per kWh
 
 # Ambulances
 AMBULANCE_TOTAL_CARRYING_CAPACITY = 1040    # kg
@@ -16,7 +16,7 @@ AMBULANCE_EMISSIONS_PER_KM = 322            # grams of CO2 / km
 AMBULANCE_CONSUMPTION_PER_KM = 0.122        # l / km
 AMBULANCE_FUEL_CAPACITY = 90                # l
 DIESEL_COST = 0.911                         # € / l
-AMBULANCE_EMISSIONS_PER_LITER = 2.67        # kg of CO2 per liter of Diesel
+AMBULANCE_EMISSIONS_PER_LITER = 2.684        # kg of CO2 per liter of Diesel
 
 # Conversions
 HOURS_TO_MIN = 60
@@ -43,4 +43,3 @@ BLOOD_AMOUNT_MAX_CATASTROPHE = 85
 
 # Simulation parameters
 TIMESTEPS = 20*60                           # minutes
-
