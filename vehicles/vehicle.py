@@ -1,5 +1,6 @@
 import googlemaps
 
+
 class Vehicle:
     gmaps = googlemaps.Client(key='AIzaSyC02gPus-Wzee0vswTGeuh5drh5VmL3alA')
 

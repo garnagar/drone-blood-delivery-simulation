@@ -16,6 +16,7 @@ from config import BLOOD_AMOUNT_MEAN_NORMAL, BLOOD_AMOUNT_SIGMA_NORMAL, BLOOD_AM
     BLOOD_INTERVAL_MAX_NORMAL, DIST_CENTER_LONG, DIST_CENTER_LAT, BLOOD_AMOUNT_MEAN_CATASTROPHE, \
     BLOOD_AMOUNT_MIN_CATASTROPHE, BLOOD_AMOUNT_MAX_CATASTROPHE, BLOOD_AMOUNT_SIGMA_CATASTROPHE, TIMESTEPS
 
+
 def get_sim_data(hosp_data_file, scenario):
 
     # Get hospital data from file
@@ -40,6 +41,7 @@ def get_sim_data(hosp_data_file, scenario):
 
     return hosp_data, blood_req
 
+
 def run_testcase(plot, hosp_data, blood_req, min_resources, max_resources, mode, sim_time):
 
     firstIter = True
@@ -60,23 +62,27 @@ def run_testcase(plot, hosp_data, blood_req, min_resources, max_resources, mode,
         for i in range(r):
             ambulances.append(Ambulance(i))
 
-        dc = DistrCenter(env, plot, 0, DIST_CENTER_LONG, DIST_CENTER_LAT, drones, ambulances, mode)
+        dc = DistrCenter(env, plot, 0, DIST_CENTER_LONG,
+                         DIST_CENTER_LAT, drones, ambulances, mode)
 
         hospitals = []
         for i, row in hosp_data.iterrows():
-            hospitals.append(Hospital(env, plot, int(row['id']), row['long'], row['lat'], dc, blood_req[i], mode, r, firstIter))
+            hospitals.append(Hospital(env, plot, int(
+                row['id']), row['long'], row['lat'], dc, blood_req[i], mode, r, firstIter))
 
         env.run(until=sim_time)
 
     plot.plot_data(mode)
     plot.reset_data()
 
+
 def main():
 
     # Edit this code to produce graphs you need:
 
     # 1. Select what will be plotted by setting enables
-    plot = Plot2(enable_blood=True, enable_power=False, enable_fuel=False, enable_cost=True, enable_emissions=True, enable_travel=False)
+    plot = Plot2(enable_blood=True, enable_power=False, enable_fuel=False,
+                 enable_cost=True, enable_emissions=True, enable_travel=False)
 
     # 2. Select CSV file with hospital data and blood demand scenario as 'normal' or 'catastrophe'
     hosp_data, blood_req = get_sim_data('resources/tc2.csv', 'normal')
@@ -88,6 +94,6 @@ def main():
     # 4. Profit
     plot.show()
 
+
 if __name__ == '__main__':
     main()
-

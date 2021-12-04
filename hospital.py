@@ -4,6 +4,7 @@ import random
 from config import DRONE_BLOOD_CAPACITY
 from utils import min_to_str
 
+
 class Hospital:
 
     def __init__(self, env, plot, hospitalID, long, lat, distribution_center, blood_req_tseries, mode, numb_of_res, flag):
@@ -23,15 +24,18 @@ class Hospital:
                 if mode == 'drones' and amount > DRONE_BLOOD_CAPACITY:
                     left_to_req = amount
                     while left_to_req > DRONE_BLOOD_CAPACITY:
-                        env.process(self.distr_center.process_blood_request(env, self, DRONE_BLOOD_CAPACITY, mode))
+                        env.process(self.distr_center.process_blood_request(
+                            env, self, DRONE_BLOOD_CAPACITY, mode))
                         left_to_req = left_to_req - DRONE_BLOOD_CAPACITY
-                    env.process(self.distr_center.process_blood_request(env, self, left_to_req, mode))
+                    env.process(self.distr_center.process_blood_request(
+                        env, self, left_to_req, mode))
                 else:
-                    env.process(self.distr_center.process_blood_request(env, self, amount, mode))
-                print("{}\tBlood requested -- hospital ID: {}, amount: {}".format(min_to_str(env.now), self.hospitalID, amount))
+                    env.process(self.distr_center.process_blood_request(
+                        env, self, amount, mode))
+                print("{}\tBlood requested -- hospital ID: {}, amount: {}".format(
+                    min_to_str(env.now), self.hospitalID, amount))
                 self.plot.add_request(env.now, amount, self.firstIter)
             yield env.timeout(1)  # Wait for 1 min
-
 
         # while True:
         #     amount = random.randint(min_amount, max_amount)

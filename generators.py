@@ -2,6 +2,7 @@ import numpy as np
 import scipy.stats as stats
 import random
 
+
 def generate_blood_demand_tseries_normal(amount_mean, amount_sigma, amount_min, amount_max,
                                          t_mean, t_sigma, t_min, t_max, length):
     ts = np.zeros(length)
@@ -9,7 +10,7 @@ def generate_blood_demand_tseries_normal(amount_mean, amount_sigma, amount_min, 
     # Create random distribution for blood amounts per surgery
     a = (amount_min - amount_mean) / amount_sigma
     b = (amount_max - amount_mean) / amount_sigma
-    amount_dist = stats.truncnorm(a, b, loc = amount_mean, scale = amount_sigma)
+    amount_dist = stats.truncnorm(a, b, loc=amount_mean, scale=amount_sigma)
 
     # Create random distribution for time intervals between surgeries
     a = (t_min - t_mean) / t_sigma
@@ -26,13 +27,14 @@ def generate_blood_demand_tseries_normal(amount_mean, amount_sigma, amount_min, 
             break
     return ts
 
+
 def generate_blood_demand_tseries_catastrophe(amount_mean, amount_sigma, amount_min, amount_max, length):
     ts = np.zeros(length)
 
     # Create random distribution for blood amounts per surgery
     a = (amount_min - amount_mean) / amount_sigma
     b = (amount_max - amount_mean) / amount_sigma
-    amount_dist = stats.truncnorm(a, b, loc = amount_mean, scale = amount_sigma)
+    amount_dist = stats.truncnorm(a, b, loc=amount_mean, scale=amount_sigma)
 
     # For a pseudorandom time
 
@@ -43,10 +45,10 @@ def generate_blood_demand_tseries_catastrophe(amount_mean, amount_sigma, amount_
     t1 = random.randint(a, b)
     t2 = random.randint(c, d)
 
-    #for a fixed time
+    # for a fixed time
     #t = round(0.5*length)
 
-    #final time series
+    # final time series
     ts[t1] = amount_dist.rvs(1).astype(int)
     ts[t2] = amount_dist.rvs(1).astype(int)
 

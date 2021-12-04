@@ -1,10 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 class Plot2():
 
     def __init__(self, enable_blood=True, enable_power=False, enable_fuel=False, enable_cost=False, enable_emissions=False, enable_travel=False):
-        self.enable = np.array([enable_blood, enable_power, enable_fuel, enable_cost, enable_emissions, enable_travel])
+        self.enable = np.array(
+            [enable_blood, enable_power, enable_fuel, enable_cost, enable_emissions, enable_travel])
         self.fig, self.axs = plt.subplots(np.count_nonzero(self.enable))
         self.isFirst = True
 
@@ -51,7 +53,8 @@ class Plot2():
 
     def __plot_subplot(self, subplt, data_x, data_y, style, ylabel, legend_label, mode_label):
         for r in data_x:
-            subplt.plot(data_x[r], data_y[r], style, label="{}{} {}".format(legend_label, r, mode_label))
+            subplt.plot(data_x[r], data_y[r], style, label="{}{} {}".format(
+                legend_label, r, mode_label))
         if ylabel is not None:
             subplt.set(ylabel=ylabel)
         subplt.legend()
@@ -72,8 +75,8 @@ class Plot2():
                               step, emission, resource_amount)
 
     def add_travel(self, step, value, resource_amount):
-        self.__add_data_point(self.travelX, self.travelY, self.travel_total, 
-                                step, value, resource_amount)
+        self.__add_data_point(self.travelX, self.travelY, self.travel_total,
+                              step, value, resource_amount)
 
     def add_cost(self, step, cost, resource_amount):
         self.__add_data_point(self.costX, self.costY, self.cost_total,
@@ -86,32 +89,39 @@ class Plot2():
     def add_fuel_consumption(self, step, consumption, resource_amount):
         self.__add_data_point(self.fuel_consumptionX, self.fuel_consumptionY, self.fuel_consumption_total,
                               step, consumption, resource_amount)
-        
+
     def plot_data(self, mode):
 
         n = 0
 
         if self.enable[0]:
             if self.isFirst:
-                self.axs[n].plot(self.requestedX, self.requestedY, 'k-x', label="requested")
+                self.axs[n].plot(self.requestedX, self.requestedY,
+                                 'k-x', label="requested")
             self.isFirst = False
-            self.__plot_subplot(self.axs[n], self.deliveredX, self.deliveredY, '-x', "Blood units", "delivered, ", mode)
+            self.__plot_subplot(
+                self.axs[n], self.deliveredX, self.deliveredY, '-x', "Blood units", "delivered, ", mode)
 
         if self.enable[1]:
             n += 1
-            self.__plot_subplot(self.axs[n], self.power_consumptionX, self.power_consumptionY, '-x', "Power [kWh]", "", mode)
+            self.__plot_subplot(self.axs[n], self.power_consumptionX,
+                                self.power_consumptionY, '-x', "Power [kWh]", "", mode)
         if self.enable[2]:
             n += 1
-            self.__plot_subplot(self.axs[n], self.fuel_consumptionX, self.fuel_consumptionY, '-x', "Fuel [L]", "", mode)
+            self.__plot_subplot(self.axs[n], self.fuel_consumptionX,
+                                self.fuel_consumptionY, '-x', "Fuel [L]", "", mode)
         if self.enable[3]:
             n += 1
-            self.__plot_subplot(self.axs[n], self.costX, self.costY, '-x', "Cost [€]", "", mode)
+            self.__plot_subplot(
+                self.axs[n], self.costX, self.costY, '-x', "Cost [€]", "", mode)
         if self.enable[4]:
             n += 1
-            self.__plot_subplot(self.axs[n], self.emissionX, self.emissionY, '-x', "Emissions [kg of CO2]", "", mode)
+            self.__plot_subplot(
+                self.axs[n], self.emissionX, self.emissionY, '-x', "Emissions [kg of CO2]", "", mode)
         if self.enable[5]:
             n += 1
-            self.__plot_subplot(self.axs[n], self.travelX, self.travelY, '-x', 'Distance traveled [km]', "", mode)
+            self.__plot_subplot(
+                self.axs[n], self.travelX, self.travelY, '-x', 'Distance traveled [km]', "", mode)
 
         self.axs[-1].set(xlabel='Time [min]')
 
@@ -146,4 +156,3 @@ class Plot2():
         self.travelX = {}
         self.travelY = {}
         self.travel_total = {}
-
