@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-import matplotlib.pyplot as plt
 import simpy
-import configparser
 import pandas as pd
 
 from distr_center import DistrCenter
@@ -9,13 +7,11 @@ from hospital import Hospital
 from vehicles.drone import Drone
 from vehicles.ambulance import Ambulance
 from plot import Plot
-from plot2 import Plot2
 from generators import generate_blood_demand_tseries_normal, generate_blood_demand_tseries_catastrophe
 from config import BLOOD_AMOUNT_MEAN_NORMAL, BLOOD_AMOUNT_SIGMA_NORMAL, BLOOD_AMOUNT_MIN_NORMAL, \
     BLOOD_AMOUNT_MAX_NORMAL, BLOOD_INTERVAL_MEAN_NORMAL, BLOOD_INTERVAL_SIGMA_NORMAL, BLOOD_INTERVAL_MIN_NORMAL, \
     BLOOD_INTERVAL_MAX_NORMAL, DIST_CENTER_LONG, DIST_CENTER_LAT, BLOOD_AMOUNT_MEAN_CATASTROPHE, \
     BLOOD_AMOUNT_MIN_CATASTROPHE, BLOOD_AMOUNT_MAX_CATASTROPHE, BLOOD_AMOUNT_SIGMA_CATASTROPHE, TIMESTEPS
-
 
 def get_sim_data(hosp_data_file, scenario):
 
@@ -81,8 +77,8 @@ def main():
     # Edit this code to produce graphs you need:
 
     # 1. Select what will be plotted by setting enables
-    plot = Plot2(enable_blood=True, enable_power=False, enable_fuel=False,
-                 enable_cost=True, enable_emissions=True, enable_travel=False)
+    plot = Plot(enable_blood=True, enable_power=False, enable_fuel=False,
+                enable_cost=True, enable_emissions=True, enable_travel=False)
 
     # 2. Select CSV file with hospital data and blood demand scenario as 'normal' or 'catastrophe'
     hosp_data, blood_req = get_sim_data('resources/tc2.csv', 'normal')
@@ -93,7 +89,6 @@ def main():
 
     # 4. Profit
     plot.show()
-
 
 if __name__ == '__main__':
     main()
